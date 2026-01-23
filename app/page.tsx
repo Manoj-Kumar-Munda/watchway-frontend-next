@@ -1,3 +1,7 @@
 export default function Page() {
-  return <h1>Watchway</h1>;
+  return (
+    <div>
+      <h1>Landing Page</h1>
+    </div>
+  );
 }

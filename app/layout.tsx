@@ -1,18 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Noto_Sans, Noto_Sans_Mono } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const notoSans = Noto_Sans({ variable: '--font-sans' });
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+const notoSansMono = Noto_Sans_Mono({ variable: '--font-noto-sans-mono' });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -25,9 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={notoSans.variable}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${notoSans.variable} ${notoSansMono.variable} antialiased dark`}
       >
         {children}
       </body>
