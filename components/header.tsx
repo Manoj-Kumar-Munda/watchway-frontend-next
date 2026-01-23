@@ -6,6 +6,7 @@ import {
   IconVideoPlus,
   IconBell,
   IconSearch,
+  IconUser,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
@@ -13,11 +14,13 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { useState } from 'react';
 import { Input } from './ui/input';
 import { Separator } from './ui/separator';
+import { useUserStore } from '@/store';
 
 const Header = () => {
+  const user = useUserStore((state) => state.user);
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b ">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-4">
             <Button variant="ghost">
@@ -32,29 +35,38 @@ const Header = () => {
               </h1>
             </div>
           </div>
+          {/* Search Bar */}
           <SearchBar />
-          <NavItems />
+          {/* Navigation Items */}
+          <nav className="flex items-center gap-4">
+            <Button>
+              <IconVideoPlus size={24} strokeWidth={3} />
+              Upload
+            </Button>
+            <Button variant={'ghost'} size={'icon-lg'}>
+              <IconBell size={24} strokeWidth={2} />
+            </Button>
+            {/* User Avatar */}
+            {user ? (
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button variant="outline">Login</Button>
+                </Link>
+
+                <Link href="/register">
+                  <Button variant={'default'}>Register</Button>
+                </Link>
+              </>
+            )}
+          </nav>
         </div>
       </div>
     </header>
-  );
-};
-
-const NavItems = () => {
-  return (
-    <nav className="flex items-center gap-4">
-      <Button>
-        <IconVideoPlus size={24} strokeWidth={3} />
-        Upload
-      </Button>
-      <Button variant={'secondary'} size={'icon-lg'}>
-        <IconBell size={24} strokeWidth={2} />
-      </Button>
-      <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>CN</AvatarFallback>
-      </Avatar>
-    </nav>
   );
 };
 
