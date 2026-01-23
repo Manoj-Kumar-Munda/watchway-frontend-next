@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
-import { Noto_Sans, Noto_Sans_Mono } from 'next/font/google';
+import { Noto_Sans, Noto_Sans_Mono, Oswald } from 'next/font/google';
 import './globals.css';
+import Header from '@/components/header';
 
-const notoSans = Noto_Sans({ variable: '--font-sans' });
+const notoSans = Noto_Sans({
+  variable: '--font-family-noto-sans',
+  subsets: ['latin'],
+});
 
-const notoSansMono = Noto_Sans_Mono({ variable: '--font-noto-sans-mono' });
+const notoSansMono = Noto_Sans_Mono({
+  variable: '--font-family-noto-mono',
+  subsets: ['latin'],
+});
+
+const oswald = Oswald({
+  variable: '--font-family-oswald',
+  subsets: ['latin'],
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,11 +29,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={notoSans.variable}>
-      <body
-        className={`${notoSans.variable} ${notoSansMono.variable} antialiased dark`}
-      >
-        {children}
+    <html
+      lang="en"
+      className={`${notoSans.variable} ${notoSansMono.variable} ${oswald.variable}`}
+    >
+      <body className="antialiased min-h-svh flex flex-col">
+        <Header />
+        <div className="flex-1 pt-20">{children}</div>
       </body>
     </html>
   );
