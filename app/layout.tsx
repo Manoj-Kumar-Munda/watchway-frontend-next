@@ -1,16 +1,11 @@
 import type { Metadata } from 'next';
-import { Noto_Sans, Noto_Sans_Mono, Oswald } from 'next/font/google';
+import { Oswald, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/header';
 
-const notoSans = Noto_Sans({
-  variable: '--font-family-noto-sans',
+const inter = Inter({
   subsets: ['latin'],
-});
-
-const notoSansMono = Noto_Sans_Mono({
-  variable: '--font-family-noto-mono',
-  subsets: ['latin'],
+  variable: '--font-family-inter',
 });
 
 const oswald = Oswald({
@@ -29,13 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${notoSans.variable} ${notoSansMono.variable} ${oswald.variable}`}
-    >
-      <body className="antialiased min-h-svh flex flex-col">
+    <html lang="en" className={`${inter.variable} ${oswald.variable}`}>
+      <body className="antialiased">
         <Header />
-        <div className="flex-1 pt-20">{children}</div>
+        <div className="min-h-svh pt-20 relative">{children}</div>
       </body>
     </html>
   );

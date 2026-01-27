@@ -154,8 +154,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: var(--font-family-noto-sans);
-  --font-mono: var(--font-family-noto-mono);
+  --font-sans: var(--font-family-inter);
   --font-oswald: var(--font-family-oswald);
 
   --radius-sm: calc(var(--radius) - 4px);
