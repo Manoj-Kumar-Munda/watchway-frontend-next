@@ -7,6 +7,8 @@ import {
   IconBell,
   IconSearch,
   IconUser,
+  IconBrandBilibili,
+  IconLayoutSidebar,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
@@ -19,16 +21,17 @@ import { useUserStore } from '@/store';
 const Header = () => {
   const user = useUserStore((state) => state.user);
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b ">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-white h-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost">
-              <IconMenu2 size={24} strokeWidth={3} />
-            </Button>
+            {/* <Button variant="ghost">
+               <IconMenu2 size={24} strokeWidth={3} /> 
+              <IconLayoutSidebar size={24} strokeWidth={3} />
+            </Button> */}
             <div className="flex items-center">
-              <Link href="/" className="bg-primary p-2 mr-2 rounded-md">
-                <IconCircleCaretRightFilled size={24} color="white" />
+              <Link href="/" className=" mr-1.5">
+                <IconBrandBilibili size={24} />
               </Link>
               <h1 className="text-2xl font-bold font-oswald text-neutral-800">
                 Watchway
