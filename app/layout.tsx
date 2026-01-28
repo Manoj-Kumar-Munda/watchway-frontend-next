@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Oswald, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/header';
+import Sidebar from '@/components/sidebar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,7 +28,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${oswald.variable}`}>
       <body className="antialiased">
         <Header />
-        <div className="min-h-svh pt-20 relative">{children}</div>
+        <div className="min-h-svh pt-20 relative flex">
+          <Sidebar />
+          {children}
+        </div>
       </body>
     </html>
   );
