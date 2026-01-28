@@ -1,14 +1,11 @@
 'use client';
 
 import {
-  IconCircleCaretRightFilled,
-  IconMenu2,
   IconVideoPlus,
   IconBell,
   IconSearch,
   IconUser,
   IconBrandBilibili,
-  IconLayoutSidebar,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
@@ -25,10 +22,6 @@ const Header = () => {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-4">
-            {/* <Button variant="ghost">
-               <IconMenu2 size={24} strokeWidth={3} /> 
-              <IconLayoutSidebar size={24} strokeWidth={3} />
-            </Button> */}
             <div className="flex items-center">
               <Link href="/" className=" mr-1.5">
                 <IconBrandBilibili size={24} />
@@ -42,7 +35,7 @@ const Header = () => {
           <SearchBar />
           {/* Navigation Items */}
           <nav className="flex items-center gap-4">
-            <Button>
+            <Button className={'rounded-full px-4 text-sm'}>
               <IconVideoPlus size={24} strokeWidth={3} />
               Upload
             </Button>
@@ -58,11 +51,18 @@ const Header = () => {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="outline">Login</Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-full px-4 text-sm"
+                  >
+                    Login
+                  </Button>
                 </Link>
 
                 <Link href="/register">
-                  <Button variant={'default'}>Register</Button>
+                  <Button variant={'outline'} className={'rounded-full px-4'}>
+                    Register
+                  </Button>
                 </Link>
               </>
             )}
