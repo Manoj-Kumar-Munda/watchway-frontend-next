@@ -1,8 +1,8 @@
-import { env } from '@/config/env';
+import env from '@/config/env';
 import { endpoints } from '@/config/endpoints';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const baseUrl = env.NEXT_PUBLIC_API_URL;
+const baseUrl = env.NEXT_PUBLIC_BASE_URL;
 
 const api = axios.create({
   baseURL: baseUrl,
@@ -32,7 +32,7 @@ const processQueue = (error: AxiosError | null) => {
 const refreshAccessToken = async (): Promise<boolean> => {
   try {
     const response = await axios.post(
-      `${baseUrl}${endpoints.auth.refresh}`,
+      `${baseUrl}${endpoints.auth.refreshToken.url}`,
       {},
       { withCredentials: true }
     );
@@ -59,7 +59,7 @@ api.interceptors.response.use(
     };
 
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (originalRequest.url?.includes(endpoints.auth.refresh)) {
+      if (originalRequest.url?.includes(endpoints.auth.refreshToken.url)) {
         return Promise.reject(error);
       }
       if (isRefreshing) {
