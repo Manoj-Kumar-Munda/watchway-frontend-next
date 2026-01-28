@@ -24,17 +24,11 @@ export const useLogin = () => {
   });
 };
 
-interface CurrentUserResponse {
-  data: IUser;
-}
-
 export const useCurrentUser = () => {
   return useQuery({
     queryKey: [endpoints.users.currentUser.queryKey],
     queryFn: () => {
-      return api.get<ApiResponse<CurrentUserResponse>>(
-        endpoints.users.currentUser.url
-      );
+      return api.get<ApiResponse<IUser>>(endpoints.users.currentUser.url);
     },
   });
 };
