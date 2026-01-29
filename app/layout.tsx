@@ -33,7 +33,9 @@ export default function RootLayout({
           <Header />
           <div className="min-h-svh pt-20 relative flex">
             <Sidebar />
-            {children}
+            <main className="flex-1 overflow-x-hidden overflow-y-auto p-4">
+              {children}
+            </main>
           </div>
           <Toaster />
         </Providers>
