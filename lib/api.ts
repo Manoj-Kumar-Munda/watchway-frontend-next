@@ -1,6 +1,7 @@
 import env from '@/config/env';
 import { endpoints } from '@/config/endpoints';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { PUBLIC_ROUTES } from '@/config/routes';
 
 const baseUrl = env.NEXT_PUBLIC_BASE_URL;
 
@@ -13,6 +14,7 @@ const api = axios.create({
 });
 
 let isRefreshing = false;
+let isRedirecting = false;
 let failedQueue: Array<{
   resolve: (value?: unknown) => void;
   reject: (reason?: unknown) => void;
@@ -59,9 +61,12 @@ api.interceptors.response.use(
     };
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      // Skip if the request is to refresh token endpoint
       if (originalRequest.url?.includes(endpoints.auth.refreshToken.url)) {
+        handleAuthError();
         return Promise.reject(error);
       }
+
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -102,9 +107,20 @@ api.interceptors.response.use(
 );
 
 const handleAuthError = () => {
-  if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+  if (typeof window === 'undefined') {
+    return;
   }
+
+  // Skip if already redirecting or already on login page
+  const currentPath = window.location.pathname;
+  console.log(PUBLIC_ROUTES.includes(currentPath));
+
+  if (isRedirecting || PUBLIC_ROUTES.includes(currentPath)) {
+    return;
+  }
+
+  isRedirecting = true;
+  window.location.href = '/login';
 };
 
 export default api;
