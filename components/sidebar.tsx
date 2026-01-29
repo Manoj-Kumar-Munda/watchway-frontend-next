@@ -40,27 +40,26 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (window.innerWidth < 768) {
-      setSidebarOpen(false);
-    }
-
-    window.addEventListener('resize', () => {
+    const handleResize = () => {
       if (window.innerWidth < 768) {
         setSidebarOpen(false);
+      } else {
+        setSidebarOpen(true);
       }
-    });
-    return () => {
-      window.removeEventListener('resize', () => {
-        if (window.innerWidth < 768) {
-          setSidebarOpen(false);
-        }
-      });
     };
-  }, []);
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [setSidebarOpen]);
 
   if (isNotShowSidebar(pathname)) {
     return null;
   }
+
   return (
     <aside
       className={cn(
