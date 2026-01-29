@@ -53,4 +53,10 @@ export const endpoints = {
       queryKey: 'history',
     },
   },
+  videos: {
+    list: {
+      url: `${API_VERSION}/videos`,
+      queryKey: 'videos',
+    },
+  },
 };
