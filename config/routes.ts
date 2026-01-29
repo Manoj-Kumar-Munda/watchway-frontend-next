@@ -13,4 +13,10 @@ const ROUTES = {
   },
 };
 
-export default ROUTES;
+const PUBLIC_ROUTES = [
+  ROUTES.HOME.path,
+  ROUTES.REGISTER.path,
+  ROUTES.LOGIN.path,
+];
+
+export { ROUTES, PUBLIC_ROUTES };
