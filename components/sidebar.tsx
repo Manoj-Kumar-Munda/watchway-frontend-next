@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import appStore from '@/store/app-store';
 import { isNotShowSidebar } from '@/utils/helpers';
+import { useEffect } from 'react';
 
 const navItems = [
   {
@@ -35,8 +36,28 @@ const navItems = [
 ];
 
 const Sidebar = () => {
-  const { sidebarOpen } = appStore();
+  const { sidebarOpen, setSidebarOpen } = appStore();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth < 768) {
+        setSidebarOpen(false);
+      }
+    });
+    return () => {
+      window.removeEventListener('resize', () => {
+        if (window.innerWidth < 768) {
+          setSidebarOpen(false);
+        }
+      });
+    };
+  }, []);
+
   if (isNotShowSidebar(pathname)) {
     return null;
   }

@@ -17,7 +17,7 @@ import { useUserStore } from '@/store';
 import appStore from '@/store/app-store';
 import { usePathname } from 'next/navigation';
 import { isNotShowSidebar } from '@/utils/helpers';
-import ROUTES from '@/config/routes';
+import { ROUTES } from '@/config/routes';
 
 const Header = () => {
   const { toggleSidebar } = appStore();
