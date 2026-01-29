@@ -1,7 +1,4 @@
 'use client';
-import { IconLayoutSidebar } from '@tabler/icons-react';
-import { useState } from 'react';
-import { Button } from './ui/button';
 import Link from 'next/link';
 import {
   IconHome,
@@ -12,6 +9,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import appStore from '@/store/app-store';
+import { isNotShowSidebar } from '@/utils/helpers';
 
 const navItems = [
   {
@@ -38,6 +36,10 @@ const navItems = [
 
 const Sidebar = () => {
   const { sidebarOpen } = appStore();
+  const pathname = usePathname();
+  if (isNotShowSidebar(pathname)) {
+    return null;
+  }
   return (
     <aside
       className={cn(
@@ -55,8 +57,6 @@ const Sidebar = () => {
     </aside>
   );
 };
-
-export default Sidebar;
 
 const NavItem = ({
   icon,
@@ -84,3 +84,5 @@ const NavItem = ({
     </li>
   );
 };
+
+export default Sidebar;

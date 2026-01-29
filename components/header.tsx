@@ -15,31 +15,39 @@ import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 import { useUserStore } from '@/store';
 import appStore from '@/store/app-store';
+import { usePathname } from 'next/navigation';
+import { isNotShowSidebar } from '@/utils/helpers';
+import ROUTES from '@/config/routes';
 
 const Header = () => {
-  const { sidebarOpen, toggleSidebar } = appStore();
+  const { toggleSidebar } = appStore();
   const user = useUserStore((state) => state.user);
+  const pathName = usePathname();
+
+  const showSidebarToggle = !isNotShowSidebar(pathName);
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b bg-white h-20">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
-          <Button
-            variant={'ghost'}
-            size={'icon'}
-            className="rounded-full"
-            onClick={toggleSidebar}
-          >
-            <IconMenu2 size={24} strokeWidth={3} />
-          </Button>
-          <div className="flex items-center">
-            <Link href="/" className=" mr-1.5">
-              <IconBrandBilibili size={24} />
-            </Link>
+          {showSidebarToggle && (
+            <Button
+              variant={'ghost'}
+              size={'icon'}
+              className="rounded-full"
+              onClick={toggleSidebar}
+            >
+              <IconMenu2 size={24} strokeWidth={3} />
+            </Button>
+          )}
+          <Link href={ROUTES.HOME.path} className="flex items-center gap-1.5">
+            <IconBrandBilibili size={24} />
+
             <h1 className="text-2xl font-bold font-oswald text-neutral-800">
               Watchway
             </h1>
-          </div>
+          </Link>
         </div>
+
         {/* Search Bar */}
         <SearchBar />
         {/* Navigation Items */}
