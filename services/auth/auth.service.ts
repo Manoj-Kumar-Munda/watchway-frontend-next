@@ -30,5 +30,6 @@ export const useCurrentUser = () => {
     queryFn: () => {
       return api.get<ApiResponse<IUser>>(endpoints.users.currentUser.url);
     },
+    retry: false,
   });
 };
