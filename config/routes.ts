@@ -1,15 +1,15 @@
 const ROUTES = {
   HOME: {
     path: '/',
-    isProtected: false,
   },
   LOGIN: {
     path: '/login',
-    isProtected: false,
   },
   REGISTER: {
     path: '/register',
-    isProtected: false,
+  },
+  CHANNEL: {
+    path: '/channel/{channelId}',
   },
 };
 
