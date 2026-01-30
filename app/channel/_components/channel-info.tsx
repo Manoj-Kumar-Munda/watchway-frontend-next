@@ -1,9 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { IconUserPlus, IconCheck } from '@tabler/icons-react';
 import { IChannel } from '@/types/channel.types';
 import { formatViews as formatSubscribers } from '@/utils/helpers';
 import { ChannelInfoSkeleton } from './skeletons';
+import SubscribeToggleButton from '@/components/subscribe-toggle-button';
 
 interface ChannelInfoProps {
   channel: IChannel | undefined;
@@ -38,20 +37,7 @@ const ChannelInfo = ({ channel, isPending }: ChannelInfoProps) => {
         </div>
 
         <div className="flex items-center gap-3 mt-4">
-          {channel.isSubscribed ? (
-            <Button
-              variant="secondary"
-              className="rounded-full px-4 font-medium gap-2"
-            >
-              <IconCheck size={18} />
-              Subscribed
-            </Button>
-          ) : (
-            <Button className="rounded-full font-medium text-white border-none shadow-lg transition-all duration-300 ">
-              <IconUserPlus size={18} />
-              Subscribe
-            </Button>
-          )}
+          <SubscribeToggleButton channelId={channel._id} />
         </div>
       </div>
     </div>
