@@ -1,7 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IChannel } from '@/types/channel.types';
-import { ChannelAbout, ChannelPlaylists, ChannelVideos } from './index';
-import { ChannelAboutSkeleton } from './skeletons';
+import {
+  ChannelAbout,
+  ChannelPlaylists,
+  ChannelSubscriptions,
+  ChannelVideos,
+} from './index';
 
 interface ChannelTabsProps {
   channelId: string;
@@ -18,8 +22,8 @@ const ChannelTabs = ({ channelId, channel, isPending }: ChannelTabsProps) => {
       >
         <TabsTrigger value="videos">Videos</TabsTrigger>
         <TabsTrigger value="playlists">Playlists</TabsTrigger>
-        <TabsTrigger value="community">Tweets</TabsTrigger>
-        <TabsTrigger value="subscribed">Subscriptions</TabsTrigger>
+        <TabsTrigger value="community">Community Posts</TabsTrigger>
+        <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
         <TabsTrigger value="about">About</TabsTrigger>
       </TabsList>
 
@@ -33,6 +37,10 @@ const ChannelTabs = ({ channelId, channel, isPending }: ChannelTabsProps) => {
 
       <TabsContent value="community" className="py-6">
         {/* <ChannelCommunity /> */}
+      </TabsContent>
+
+      <TabsContent value="subscriptions" className="py-6">
+        <ChannelSubscriptions />
       </TabsContent>
 
       <TabsContent value="about" className="py-6">
