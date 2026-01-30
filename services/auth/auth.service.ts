@@ -3,7 +3,7 @@ import { SignInFormSchema } from '@/app/(auth)/_components/sign-in-form';
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { ApiResponse } from './types';
+import { ApiResponse } from '../types';
 import { IUser } from '@/types/auth.types';
 
 interface LoginResponse {

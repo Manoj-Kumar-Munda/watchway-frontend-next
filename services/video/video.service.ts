@@ -1,7 +1,7 @@
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
-import { ApiResponse } from './types';
+import { ApiResponse } from '../types';
 import { IVideo } from '@/types';
 
 interface IVideoListResponse {
