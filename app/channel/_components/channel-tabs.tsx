@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IChannel } from '@/types/channel.types';
 import {
   ChannelAbout,
+  ChannelCommunity,
   ChannelPlaylists,
   ChannelSubscriptions,
   ChannelVideos,
@@ -36,7 +37,7 @@ const ChannelTabs = ({ channelId, channel, isPending }: ChannelTabsProps) => {
       </TabsContent>
 
       <TabsContent value="community" className="py-6">
-        {/* <ChannelCommunity /> */}
+        <ChannelCommunity />
       </TabsContent>
 
       <TabsContent value="subscriptions" className="py-6">

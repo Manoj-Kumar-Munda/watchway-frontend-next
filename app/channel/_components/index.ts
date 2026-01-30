@@ -7,6 +7,7 @@ export { default as ChannelTabs } from './channel-tabs';
 export { default as ChannelVideos } from './channel-videos';
 export { default as UpdateCoverImageModal } from './update-cover-image-modal';
 export { default as ChannelSubscriptions } from './channel-subscriptions';
+export { default as ChannelCommunity } from './channel-community';
 export {
   ChannelAboutSkeleton,
   ChannelBannerSkeleton,
