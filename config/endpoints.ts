@@ -67,4 +67,18 @@ export const endpoints = {
       queryKey: 'videos',
     },
   },
+  subscriptions: {
+    list: {
+      url: `${API_VERSION}/subscription/u/{userId}`,
+      queryKey: 'subscriptions',
+    },
+    toggle: {
+      url: `${API_VERSION}/subscription/c/{channelId}`,
+      queryKey: 'subscribers',
+    },
+    subscribers: {
+      url: `${API_VERSION}/subscription/c/{channelId}`,
+      queryKey: 'subscribers',
+    },
+  },
 };
