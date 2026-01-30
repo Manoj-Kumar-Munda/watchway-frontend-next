@@ -5,6 +5,7 @@ export { default as ChannelPageContent } from './channel-page-content';
 export { default as ChannelPlaylists } from './channel-playlists';
 export { default as ChannelTabs } from './channel-tabs';
 export { default as ChannelVideos } from './channel-videos';
+export { default as UpdateCoverImageModal } from './update-cover-image-modal';
 export {
   ChannelAboutSkeleton,
   ChannelBannerSkeleton,

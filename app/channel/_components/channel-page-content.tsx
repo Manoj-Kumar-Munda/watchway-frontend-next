@@ -1,6 +1,6 @@
 'use client';
 
-import { useChannel } from '@/services/auth/channel.service';
+import { useChannel } from '@/services/channel/channel.service';
 import { ChannelBanner, ChannelInfo, ChannelTabs } from './index';
 
 interface ChannelPageContentProps {
@@ -28,7 +28,11 @@ const ChannelPageContent = ({ channelId }: ChannelPageContentProps) => {
 
   return (
     <div className="flex flex-col">
-      <ChannelBanner coverImage={channel?.coverImage} isPending={isPending} />
+      <ChannelBanner
+        coverImage={channel?.coverImage}
+        channelId={channelId}
+        isPending={isPending}
+      />
 
       <ChannelInfo channel={channel} isPending={isPending} />
 

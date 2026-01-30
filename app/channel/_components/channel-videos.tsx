@@ -1,6 +1,6 @@
 'use client';
 
-import { useChannelVideos } from '@/services/auth/channel.service';
+import { useChannelVideos } from '@/services/channel/channel.service';
 import { VideoCardRoot } from '@/components/video-card';
 import { IconVideo } from '@tabler/icons-react';
 import { ChannelVideosSkeleton } from './skeletons';
