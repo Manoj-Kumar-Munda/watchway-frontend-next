@@ -24,8 +24,13 @@ const ChannelSubscriptions = () => {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl mx-auto ring-0">
       <CardContent className="space-y-4">
+        {subscriptions?.data?.data?.length === 0 && (
+          <div className="text-center text-muted-foreground">
+            No subscriptions
+          </div>
+        )}
         {subscriptions?.data?.data?.map((subscription) => (
           <div
             key={subscription._id}
@@ -39,7 +44,7 @@ const ChannelSubscriptions = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-base font-semibold">
                   {subscription.channelInfo.fullName}
                 </h3>
                 <p className="text-muted-foreground">
