@@ -10,12 +10,14 @@ const VerticalVideoCard = ({ video }: { video: IVideo }) => {
         <VideoCardRoot.ChannelAvatar
           src={video.owner.avatar}
           channelName={video.owner.fullName}
+          channelId={video.owner._id}
         />
         <div className="flex flex-col">
           <VideoCardRoot.VideoTitle title={video.title} />
           <VideoCardRoot.ChannelMeta
             channelName={video.owner.fullName}
             channelAvatar={video.owner.avatar}
+            channelId={video.owner._id}
           />
           <VideoCardRoot.VideoMeta
             views={video.views}

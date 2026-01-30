@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import Image from 'next/image';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { formatTimeAgo, formatViews } from '@/utils/helpers';
 
@@ -94,42 +95,57 @@ const VideoMeta = ({
 const ChannelAvatar = ({
   src,
   channelName,
+  channelId,
 }: {
   src: string;
   channelName: string;
+  channelId: string;
 }) => {
   const { orientation } = React.useContext(VideoCardContext);
   return (
-    <Avatar size={orientation === 'horizontal' ? 'sm' : 'lg'}>
-      <AvatarImage src={src} />
-      <AvatarFallback>{channelName.charAt(0)}</AvatarFallback>
-    </Avatar>
+    <Link href={`/channel/${channelId}`}>
+      <Avatar size={orientation === 'horizontal' ? 'sm' : 'lg'}>
+        <AvatarImage src={src} />
+        <AvatarFallback>{channelName.charAt(0)}</AvatarFallback>
+      </Avatar>
+    </Link>
   );
 };
 
 const ChannelMeta = ({
   channelName,
   channelAvatar,
+  channelId,
   className,
 }: {
   channelName: string;
   channelAvatar: string;
+  channelId: string;
   className?: string;
 }) => {
   const { orientation } = React.useContext(VideoCardContext);
   return (
     <div className={cn('flex items-center gap-2', className)}>
       {orientation === 'horizontal' && (
-        <ChannelAvatar src={channelAvatar} channelName={channelName} />
+        <ChannelAvatar
+          src={channelAvatar}
+          channelName={channelName}
+          channelId={channelId}
+        />
       )}
-      <p
-        className={cn('text-sm font-semibold text-muted-foreground ', {
-          'text-xs': orientation === 'horizontal',
-          'text-sm': orientation === 'vertical',
-        })}
-      >
-        {channelName}
-      </p>
+      <Link href={`/channel/${channelId}`}>
+        <p
+          className={cn(
+            'text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors',
+            {
+              'text-xs': orientation === 'horizontal',
+              'text-sm': orientation === 'vertical',
+            }
+          )}
+        >
+          {channelName}
+        </p>
+      </Link>
     </div>
   );
 };
