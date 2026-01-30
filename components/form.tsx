@@ -16,21 +16,22 @@ import {
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
-interface AuthFormContextValue<T extends FieldValues> {
+interface FormContextValue<T extends FieldValues> {
   form: UseFormReturn<T>;
   formId: string;
   onSubmit: (data: T) => void;
 }
 
-const AuthFormContext =
-  React.createContext<AuthFormContextValue<FieldValues> | null>(null);
+const FormContext = React.createContext<FormContextValue<FieldValues> | null>(
+  null
+);
 
-function useAuthFormContext<T extends FieldValues>() {
-  const context = React.useContext(AuthFormContext);
+function useFormContext<T extends FieldValues>() {
+  const context = React.useContext(FormContext);
   if (!context) {
-    throw new Error('AuthForm components must be used within an AuthForm.Root');
+    throw new Error('Form components must be used within a Form.Root');
   }
-  return context as AuthFormContextValue<T>;
+  return context as FormContextValue<T>;
 }
 
 interface RootProps<T extends FieldValues> {
@@ -49,11 +50,11 @@ function Root<T extends FieldValues>({
   className = 'w-full sm:max-w-md',
 }: RootProps<T>) {
   return (
-    <AuthFormContext.Provider
-      value={{ form, formId, onSubmit } as AuthFormContextValue<FieldValues>}
+    <FormContext.Provider
+      value={{ form, formId, onSubmit } as FormContextValue<FieldValues>}
     >
       <Card className={className}>{children}</Card>
-    </AuthFormContext.Provider>
+    </FormContext.Provider>
   );
 }
 
@@ -76,7 +77,7 @@ interface ContentProps {
 }
 
 function Content({ children }: ContentProps) {
-  const { form, formId, onSubmit } = useAuthFormContext();
+  const { form, formId, onSubmit } = useFormContext();
 
   return (
     <CardContent>
@@ -104,14 +105,14 @@ function TextField<T extends FieldValues>({
   placeholder,
   type = 'text',
 }: TextFieldProps<T>) {
-  const { form } = useAuthFormContext<T>();
+  const { form } = useFormContext<T>();
 
   return (
     <Controller
       name={name}
       control={form.control}
       render={({ field, fieldState }) => (
-        <Field>
+        <Field className="gap-1">
           <FieldLabel htmlFor={name}>{label}</FieldLabel>
           <Input
             {...field}
@@ -143,7 +144,7 @@ interface SubmitButtonProps {
 }
 
 function SubmitButton({ loadingText, children, ...props }: SubmitButtonProps) {
-  const { form, formId } = useAuthFormContext();
+  const { form, formId } = useFormContext();
   const isSubmitting = form.formState.isSubmitting;
 
   return (
@@ -189,7 +190,7 @@ function FooterLink({ text, linkText, onClick }: FooterLinkProps) {
   );
 }
 
-export const AuthForm = {
+export const Form = {
   Root,
   Header,
   Content,
