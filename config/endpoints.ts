@@ -81,4 +81,22 @@ export const endpoints = {
       queryKey: 'subscribers',
     },
   },
+  community: {
+    create: {
+      url: `${API_VERSION}/tweet`,
+      queryKey: 'community',
+    },
+    list: {
+      url: `${API_VERSION}/tweet/user/{userId}`,
+      queryKey: 'community',
+    },
+    update: {
+      url: `${API_VERSION}/tweet/{tweetId}`,
+      queryKey: 'community',
+    },
+    delete: {
+      url: `${API_VERSION}/tweet/{tweetId}`,
+      queryKey: 'community',
+    },
+  },
 };
