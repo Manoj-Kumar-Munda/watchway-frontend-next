@@ -2,10 +2,11 @@
 
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../types';
 import { IChannel, IChannelVideo } from '@/types/channel.types';
 import { IVideo } from '@/types';
+import { getQueryClient } from '@/lib/query-client';
 
 interface IChannelVideosResponse {
   data: {
@@ -40,5 +41,29 @@ export const useChannelVideos = (channelId: string) => {
       return api.get(`${endpoints.videos.list.url}?userId=${channelId}`);
     },
     enabled: !!channelId,
+  });
+};
+
+export const useUpdateChannelCoverImage = () => {
+  return useMutation({
+    mutationFn: (coverImage: File) => {
+      const formData = new FormData();
+      formData.append('coverImage', coverImage);
+
+      return api.patch<ApiResponse<{ data: IChannel }>>(
+        endpoints.users.updateCoverImage.url,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+    },
+    onSettled: () => {
+      getQueryClient().invalidateQueries({
+        queryKey: [endpoints.users.channel.queryKey],
+      });
+    },
   });
 };

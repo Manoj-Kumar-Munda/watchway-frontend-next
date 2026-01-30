@@ -1,5 +1,5 @@
 'use client';
-import { useVideoList } from '@/services/auth/video.service';
+import { useVideoList } from '@/services/video/video.service';
 import VerticalVideoCard from './vertical-video-card';
 import VideoSkeleton from './video-skeleton';
 

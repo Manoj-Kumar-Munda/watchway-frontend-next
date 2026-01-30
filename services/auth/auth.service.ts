@@ -5,6 +5,7 @@ import api from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../types';
 import { IUser } from '@/types/auth.types';
+import { getQueryClient } from '@/lib/query-client';
 
 interface LoginResponse {
   accessToken: string;
@@ -20,7 +21,11 @@ export const useLogin = () => {
         data
       );
     },
-    mutationKey: [endpoints.auth.login.queryKey],
+    onSettled: () => {
+      getQueryClient().invalidateQueries({
+        queryKey: [endpoints.users.currentUser.queryKey],
+      });
+    },
   });
 };
 
