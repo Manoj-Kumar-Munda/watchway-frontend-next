@@ -1,3 +1,5 @@
+import { IUser } from './auth.types';
+
 export interface IVideo {
   _id: string;
   videoFile: string;
@@ -7,12 +9,7 @@ export interface IVideo {
   duration: number;
   views: number;
   isPublished: boolean;
-  owner: {
-    _id: string;
-    username: string;
-    fullName: string;
-    avatar: string;
-  };
+  owner: Pick<IUser, '_id' | 'username' | 'fullName' | 'avatar'>;
   createdAt: string;
   updatedAt: string;
 }
