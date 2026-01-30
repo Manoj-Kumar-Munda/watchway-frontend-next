@@ -43,6 +43,14 @@ export const endpoints = {
     channel: {
       url: `${API_VERSION}/users/channel/{channelId}`,
       queryKey: 'channel',
+      cover: {
+        url: `${API_VERSION}/users/channel/{channelId}/cover`,
+        queryKey: 'channel',
+      },
+      avatar: {
+        url: `${API_VERSION}/users/channel/{channelId}/avatar`,
+        queryKey: 'channel',
+      },
     },
     updateWatchHistory: {
       url: `${API_VERSION}/users/update-history`,
