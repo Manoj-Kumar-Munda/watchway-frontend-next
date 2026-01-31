@@ -1,5 +1,5 @@
 'use client';
-import { SignInFormSchema } from '@/app/(auth)/_components/sign-in-form';
+import { SignInFormSchema as SignInPayload } from '@/app/(auth)/_components/sign-in-form';
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -15,7 +15,7 @@ interface LoginResponse {
 
 export const useLogin = () => {
   return useMutation({
-    mutationFn: (data: SignInFormSchema) => {
+    mutationFn: (data: SignInPayload) => {
       return api.post<ApiResponse<LoginResponse>>(
         endpoints.auth.login.url,
         data
