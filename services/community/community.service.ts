@@ -96,10 +96,67 @@ const useToggleLikeCommunityPost = (postId: string, userId: string) => {
   });
 };
 
+const usePostCommentMutation = (userId: string, postId: string) => {
+  const queryClient = getQueryClient();
+  return useMutation({
+    mutationFn: (data: { content: string }) =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.community.replies.url.replace('{tweetId}', postId),
+        data
+      ),
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: [...endpoints.community.list.queryKeys, userId],
+      });
+      const previousData = queryClient.getQueryData([
+        ...endpoints.community.list.queryKeys,
+        userId,
+      ]);
+      queryClient.setQueryData(
+        [...endpoints.community.list.queryKeys, userId],
+        (oldData: ApiResponse<ICommunityPostListResponse> | undefined) => {
+          if (!oldData || !oldData.data?.data) return oldData;
+
+          const updatedData = oldData.data.data.map((post) => {
+            if (post._id === postId) {
+              return {
+                ...post,
+                comments: post.comments + 1,
+              };
+            }
+            return post;
+          });
+
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              data: updatedData,
+            },
+          };
+        }
+      );
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        [...endpoints.community.list.queryKeys, userId],
+        context?.previousData
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...endpoints.community.list.queryKeys, userId],
+      });
+    },
+  });
+};
+
 export {
   useCommunityPostList,
   useCreateCommunityPost,
   useUpdateCommunityPost,
   useDeleteCommunityPost,
   useToggleLikeCommunityPost,
+  usePostCommentMutation,
 };

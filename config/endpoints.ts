@@ -98,6 +98,10 @@ export const endpoints = {
       url: `${API_VERSION}/tweet/{tweetId}`,
       queryKeys: ['community'],
     },
+    replies: {
+      url: `${API_VERSION}/tweet/{tweetId}/comments`,
+      queryKeys: ['community'],
+    },
   },
   playlists: {
     createPlaylist: {
