@@ -1,4 +1,4 @@
-import { ChannelPlaylists } from '../../_components';
+import { ChannelPlaylists } from './_components';
 
 const ChannelPlaylistsPage = () => {
   return <ChannelPlaylists />;

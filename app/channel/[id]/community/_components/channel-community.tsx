@@ -1,5 +1,4 @@
-import ChannelCommunityPostsList from './channel-community-posts';
-import CommunityPostForm from './community-post-form';
+import { ChannelCommunityPostsList, CommunityPostForm } from './';
 
 const ChannelCommunity = () => {
   return (

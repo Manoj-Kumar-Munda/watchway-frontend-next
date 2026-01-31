@@ -1,7 +1,7 @@
 'use client';
 
 import { IconMail, IconWorld } from '@tabler/icons-react';
-import { ChannelAboutSkeleton } from './skeletons';
+import { ChannelAboutSkeleton } from '../../../_components/skeletons';
 import { useParams } from 'next/navigation';
 import { useChannel } from '@/services/channel/channel.service';
 

@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { IUser } from '@/types/auth.types';
 import { ApiResponse } from '../types';
 import { getQueryClient } from '@/lib/query-client';
-import { CommunityPostFormValidationSchema as CreatePostPayload } from '@/app/channel/_components/community-post-form';
+import { CommunityPostFormValidationSchema as CreatePostPayload } from '@/app/channel/[id]/community/_components/community-post-form';
 
 interface ICommunityPost {
   _id: string;

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ChannelBannerSkeleton } from './skeletons';
+import { ChannelBannerSkeleton } from './';
 import { useUserStore } from '@/store';
 import UpdateCoverImageModal from './update-cover-image-modal';
 

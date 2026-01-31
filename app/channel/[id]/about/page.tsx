@@ -1,4 +1,4 @@
-import { ChannelAbout } from '../../_components';
+import { ChannelAbout } from './_components';
 
 const AboutPage = () => {
   return <ChannelAbout />;

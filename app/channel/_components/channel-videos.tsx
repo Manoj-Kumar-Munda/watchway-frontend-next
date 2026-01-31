@@ -3,7 +3,7 @@
 import { useChannelVideos } from '@/services/channel/channel.service';
 import { VideoCardRoot } from '@/components/video-card';
 import { IconVideo } from '@tabler/icons-react';
-import { ChannelVideosSkeleton } from './skeletons';
+import { ChannelVideosSkeleton } from './';
 import { useParams } from 'next/navigation';
 
 interface ChannelVideosProps {

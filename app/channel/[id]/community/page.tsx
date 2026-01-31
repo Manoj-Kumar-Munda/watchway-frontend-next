@@ -1,4 +1,4 @@
-import { ChannelCommunity } from '../../_components';
+import { ChannelCommunity } from './_components';
 
 const ChannelCommunityPage = () => {
   return <ChannelCommunity />;

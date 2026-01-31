@@ -2,7 +2,7 @@
 
 import { useCommunityPostList } from '@/services/community/community.service';
 import { useParams } from 'next/navigation';
-import { ChannelPostsSkeleton } from './skeletons';
+import { ChannelPostsSkeleton } from '../../../_components/skeletons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatTimeAgo } from '@/utils/helpers';

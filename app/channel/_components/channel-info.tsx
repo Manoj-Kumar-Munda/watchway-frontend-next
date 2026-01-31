@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IChannel } from '@/types/channel.types';
 import { formatViews as formatSubscribers } from '@/utils/helpers';
-import { ChannelInfoSkeleton } from './skeletons';
+import { ChannelInfoSkeleton } from './';
 import SubscribeToggleButton from '@/components/subscribe-toggle-button';
 
 interface ChannelInfoProps {

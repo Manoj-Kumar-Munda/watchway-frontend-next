@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/config/routes';
-import { Button } from '@/components/ui/button';
 
 const tabs = [
   { value: ROUTES.CHANNEL.children.VIDEOS.path, label: 'Videos' },
