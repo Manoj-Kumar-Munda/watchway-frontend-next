@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Textarea } from './ui/textarea';
 
 interface FormContextValue<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -73,14 +74,15 @@ function Header({ title, description }: HeaderProps) {
 }
 
 interface ContentProps {
+  className?: string;
   children: React.ReactNode;
 }
 
-function Content({ children }: ContentProps) {
+function Content({ children, className }: ContentProps) {
   const { form, formId, onSubmit } = useFormContext();
 
   return (
-    <CardContent>
+    <CardContent className={className}>
       <form
         id={formId}
         onSubmit={form.handleSubmit(onSubmit)}
@@ -94,7 +96,7 @@ function Content({ children }: ContentProps) {
 
 interface TextFieldProps<T extends FieldValues> {
   name: Path<T>;
-  label: string;
+  label?: string;
   placeholder: string;
   type?: 'text' | 'email' | 'password';
 }
@@ -113,11 +115,39 @@ function TextField<T extends FieldValues>({
       control={form.control}
       render={({ field, fieldState }) => (
         <Field className="gap-1">
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
           <Input
             {...field}
             id={name}
             type={type}
+            aria-invalid={fieldState.invalid}
+            placeholder={placeholder}
+            autoComplete="off"
+          />
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+}
+
+function TextAreaField<T extends FieldValues>({
+  name,
+  label,
+  placeholder,
+}: TextFieldProps<T>) {
+  const { form } = useFormContext<T>();
+
+  return (
+    <Controller
+      name={name}
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field className="gap-1">
+          {label && <FieldLabel htmlFor={name}>{label}</FieldLabel>}
+          <Textarea
+            {...field}
+            id={name}
             aria-invalid={fieldState.invalid}
             placeholder={placeholder}
             autoComplete="off"
@@ -198,4 +228,5 @@ export const Form = {
   Footer,
   SubmitButton,
   FooterLink,
+  TextAreaField,
 };

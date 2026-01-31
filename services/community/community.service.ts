@@ -1,8 +1,10 @@
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { IUser } from '@/types/auth.types';
 import { ApiResponse } from '../types';
+import { getQueryClient } from '@/lib/query-client';
+import { CommunityPostFormValidationSchema as CreatePostPayload } from '@/app/channel/_components/community-post-form';
 
 interface ICommunityPost {
   _id: string;
@@ -21,7 +23,20 @@ const useCommunityPostList = (userId: string) => {
   });
 };
 
-const useCreateCommunityPost = () => {};
+const useCreateCommunityPost = (userId: string) => {
+  return useMutation({
+    mutationFn: (data: CreatePostPayload) =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.community.create.url,
+        data
+      ),
+    onSettled: () => {
+      getQueryClient().invalidateQueries({
+        queryKey: [endpoints.community.list.queryKey, userId],
+      });
+    },
+  });
+};
 
 const useUpdateCommunityPost = () => {};
 

@@ -24,7 +24,7 @@ const ChannelCommunityPostsList = () => {
   const posts = data?.data?.data;
 
   return (
-    <div className="space-y-4 px-4 lg:px-6 max-w-3xl w-full mx-auto">
+    <div className="space-y-4 w-full">
       {posts?.map((post) => (
         <Card
           key={post._id}
