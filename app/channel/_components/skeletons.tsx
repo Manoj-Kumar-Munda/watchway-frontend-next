@@ -65,3 +65,13 @@ export const ChannelVideosSkeleton = ({ count = 6 }: { count?: number }) => {
     </div>
   );
 };
+
+export const ChannelPostsSkeleton = ({ count = 6 }: { count?: number }) => {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <Skeleton key={i} className="w-full h-24" />
+      ))}
+    </div>
+  );
+};
