@@ -9,7 +9,14 @@ const ROUTES = {
     path: '/register',
   },
   CHANNEL: {
-    path: '/channel/{channelId}',
+    path: '/channel/:id',
+    children: {
+      VIDEOS: { path: '/' },
+      PLAYLISTS: { path: 'playlists' },
+      COMMUNITY: { path: 'community' },
+      SUBSCRIPTIONS: { path: 'subscriptions' },
+      ABOUT: { path: 'about' },
+    },
   },
 };
 
