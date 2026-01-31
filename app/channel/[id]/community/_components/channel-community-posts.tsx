@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatTimeAgo } from '@/utils/helpers';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, ThumbsUp } from 'lucide-react';
+import ToggleLikeButton from '@/components/toogle-like-button';
+import PostLikeButton from './post-like-button';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
@@ -46,14 +48,7 @@ const ChannelCommunityPostsList = () => {
               </div>
               <p className="text-sm text-foreground">{post.content}</p>
               <div className="flex items-center gap-4 pt-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-foreground p-0 h-auto gap-2 hover:bg-transparent"
-                >
-                  <ThumbsUp className="w-4 h-4" />
-                  <span className="text-xs">Like</span>
-                </Button>
+                <PostLikeButton post={post} />
                 <Button
                   variant="ghost"
                   size="sm"

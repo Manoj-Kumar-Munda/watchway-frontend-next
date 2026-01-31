@@ -1,21 +1,17 @@
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { IUser } from '@/types/auth.types';
 import { ApiResponse } from '../types';
 import { getQueryClient } from '@/lib/query-client';
 import { CommunityPostFormValidationSchema as CreatePostPayload } from '@/app/channel/[id]/community/_components/community-post-form';
+import { ICommunityPost } from '@/types';
 
-interface ICommunityPost {
-  _id: string;
-  content: string;
-  owner: Pick<IUser, '_id' | 'username' | 'avatar'>;
-  createdAt: string;
-  updatedAt: string;
+interface ICommunityPostListResponse {
+  data: ICommunityPost[];
 }
 
 const useCommunityPostList = (userId: string) => {
-  return useQuery<ApiResponse<{ data: ICommunityPost[] }>>({
+  return useQuery<ApiResponse<ICommunityPostListResponse>>({
     queryKey: [...endpoints.community.list.queryKeys, userId],
     queryFn: () =>
       api.get(endpoints.community.list.url.replace('{userId}', userId)),
@@ -42,9 +38,68 @@ const useUpdateCommunityPost = () => {};
 
 const useDeleteCommunityPost = () => {};
 
+const useToggleLikeCommunityPost = (postId: string, userId: string) => {
+  const queryClient = getQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.likes.toggleTweetLike.url.replace('{tweetId}', postId)
+      ),
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: [...endpoints.community.list.queryKeys, userId],
+      });
+      const previousData = queryClient.getQueryData([
+        ...endpoints.community.list.queryKeys,
+        userId,
+      ]);
+      queryClient.setQueryData(
+        [...endpoints.community.list.queryKeys, userId],
+        (oldData: ApiResponse<ICommunityPostListResponse> | undefined) => {
+          if (!oldData || !oldData.data?.data) return oldData;
+
+          const updatedData = oldData.data.data.map((post) => {
+            if (post._id === postId) {
+              return {
+                ...post,
+                isLiked: !post.isLiked,
+                likeCount: post.isLiked
+                  ? post.likeCount - 1
+                  : post.likeCount + 1,
+              };
+            }
+            return post;
+          });
+
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              data: updatedData,
+            },
+          };
+        }
+      );
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        [...endpoints.community.list.queryKeys, userId],
+        context?.previousData
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...endpoints.community.list.queryKeys, userId],
+      });
+    },
+  });
+};
+
 export {
   useCommunityPostList,
   useCreateCommunityPost,
   useUpdateCommunityPost,
   useDeleteCommunityPost,
+  useToggleLikeCommunityPost,
 };

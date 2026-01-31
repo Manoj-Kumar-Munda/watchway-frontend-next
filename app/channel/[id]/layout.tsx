@@ -12,7 +12,7 @@ interface ChannelPageLayoutProps {
 const prefetchChannel = async (channelId: string) => {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: [endpoints.users.channel.queryKey, channelId],
+    queryKey: [...endpoints.users.channel.queryKeys, channelId],
     queryFn: () => {
       return api.get(
         endpoints.users.channel.url.replace('{channelId}', channelId)
@@ -25,7 +25,7 @@ const prefetchChannel = async (channelId: string) => {
 const prefetchChannelVideos = async (channelId: string) => {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: [endpoints.videos.list.queryKey, 'channel', channelId],
+    queryKey: [...endpoints.videos.list.queryKeys, 'channel', channelId],
     queryFn: () => {
       return api.get(`${endpoints.videos.list.url}?userId=${channelId}`);
     },
