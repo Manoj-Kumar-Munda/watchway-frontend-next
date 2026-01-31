@@ -28,7 +28,7 @@ const ChannelCommunityPostsList = () => {
       {posts?.map((post) => (
         <Card
           key={post._id}
-          className=" p-0 pb-4 ring-0 shadow-none border-b rounded-none border-neutral-200"
+          className=" p-0 pb-4 ring-0 shadow-none border-b rounded-none border-neutral-200 last:border-0"
         >
           <CardContent className="flex gap-4">
             <Avatar className="mt-0.5">
