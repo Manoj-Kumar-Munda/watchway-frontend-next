@@ -4,6 +4,7 @@ import { useChannelVideos } from '@/services/channel/channel.service';
 import { VideoCardRoot } from '@/components/video-card';
 import { IconVideo } from '@tabler/icons-react';
 import { ChannelVideosSkeleton } from './skeletons';
+import { useParams } from 'next/navigation';
 
 interface ChannelVideosProps {
   channelId: string;
@@ -24,7 +25,9 @@ const EmptyState = () => (
   </div>
 );
 
-const ChannelVideos = ({ channelId }: ChannelVideosProps) => {
+const ChannelVideos = () => {
+  const params = useParams();
+  const channelId = params.id as string;
   const { data, isPending, isError } = useChannelVideos(channelId);
 
   if (isError) {

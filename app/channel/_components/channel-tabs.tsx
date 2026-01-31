@@ -1,53 +1,55 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { IChannel } from '@/types/channel.types';
-import {
-  ChannelAbout,
-  ChannelCommunity,
-  ChannelPlaylists,
-  ChannelSubscriptions,
-  ChannelVideos,
-} from './index';
+'use client';
 
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { ROUTES } from '@/config/routes';
+import { Button } from '@/components/ui/button';
+
+const tabs = [
+  { value: ROUTES.CHANNEL.children.VIDEOS.path, label: 'Videos' },
+  { value: ROUTES.CHANNEL.children.PLAYLISTS.path, label: 'Playlists' },
+  { value: ROUTES.CHANNEL.children.COMMUNITY.path, label: 'Community' },
+  { value: ROUTES.CHANNEL.children.SUBSCRIPTIONS.path, label: 'Subscriptions' },
+  { value: ROUTES.CHANNEL.children.ABOUT.path, label: 'About' },
+];
+
+//defailt
 interface ChannelTabsProps {
   channelId: string;
-  channel?: IChannel;
-  isPending: boolean;
 }
 
-const ChannelTabs = ({ channelId, channel, isPending }: ChannelTabsProps) => {
+const ChannelTabs = ({ channelId }: ChannelTabsProps) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
-    <Tabs defaultValue="videos" className="w-full">
-      <TabsList
-        variant="line"
-        className="border-b border-border w-full justify-start"
-      >
-        <TabsTrigger value="videos">Videos</TabsTrigger>
-        <TabsTrigger value="playlists">Playlists</TabsTrigger>
-        <TabsTrigger value="community">Community Posts</TabsTrigger>
-        <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-        <TabsTrigger value="about">About</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="videos" className="py-6">
-        <ChannelVideos channelId={channelId} />
-      </TabsContent>
-
-      <TabsContent value="playlists" className="py-6">
-        <ChannelPlaylists />
-      </TabsContent>
-
-      <TabsContent value="community" className="py-6">
-        <ChannelCommunity />
-      </TabsContent>
-
-      <TabsContent value="subscriptions" className="py-6">
-        <ChannelSubscriptions />
-      </TabsContent>
-
-      <TabsContent value="about" className="py-6">
-        {channel && <ChannelAbout isPending={isPending} channel={channel} />}
-      </TabsContent>
-    </Tabs>
+    <div className="w-full border-b border-border">
+      <nav className="flex gap-6">
+        {tabs.map((tab) => {
+          const fullPath =
+            tab.value === '/'
+              ? `/channel/${channelId}`
+              : `/channel/${channelId}/${tab.value}`;
+          const isActive = pathname === fullPath;
+          return (
+            <Link
+              href={fullPath}
+              key={tab.value}
+              className={cn(
+                'relative py-3 text-sm font-medium transition-colors',
+                'hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                isActive
+                  ? 'text-foreground after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </div>
   );
 };
 

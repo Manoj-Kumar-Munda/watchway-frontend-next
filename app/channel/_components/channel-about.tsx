@@ -1,16 +1,33 @@
-import { IChannel } from '@/types/channel.types';
+'use client';
+
 import { IconMail, IconWorld } from '@tabler/icons-react';
 import { ChannelAboutSkeleton } from './skeletons';
+import { useParams } from 'next/navigation';
+import { useChannel } from '@/services/channel/channel.service';
 
-interface ChannelAboutProps {
-  channel: IChannel;
-  isPending: boolean;
-}
+const ChannelAbout = () => {
+  const params = useParams();
 
-const ChannelAbout = ({ channel, isPending }: ChannelAboutProps) => {
+  const { data, isPending, isError } = useChannel(params?.id as string);
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <h2 className="text-2xl font-bold text-foreground mb-2">
+          Channel not found
+        </h2>
+        <p className="text-muted-foreground">
+          The channel you&apos;re looking for doesn&apos;t exist or has been
+          removed.
+        </p>
+      </div>
+    );
+  }
+
   if (isPending) {
     return <ChannelAboutSkeleton />;
   }
+  const channel = data?.data?.data;
   return (
     <div className=" space-y-4">
       <section className="space-y-2">

@@ -1,14 +1,12 @@
 'use client';
 
 import { useChannel } from '@/services/channel/channel.service';
-import { ChannelBanner, ChannelInfo, ChannelTabs } from './index';
+import { ChannelBanner, ChannelInfo } from './index';
+import { useParams } from 'next/navigation';
 
-interface ChannelPageContentProps {
-  channelId: string;
-}
-
-const ChannelPageContent = ({ channelId }: ChannelPageContentProps) => {
-  const { data, isPending, isError } = useChannel(channelId);
+const ChannelPageContent = () => {
+  const params = useParams();
+  const { data, isPending, isError } = useChannel(params?.id as string);
 
   if (isError) {
     return (
@@ -30,17 +28,11 @@ const ChannelPageContent = ({ channelId }: ChannelPageContentProps) => {
     <div className="flex flex-col">
       <ChannelBanner
         coverImage={channel?.coverImage}
-        channelId={channelId}
+        channelId={params?.id as string}
         isPending={isPending}
       />
 
       <ChannelInfo channel={channel} isPending={isPending} />
-
-      <ChannelTabs
-        channelId={channelId}
-        channel={channel}
-        isPending={isPending}
-      />
     </div>
   );
 };
