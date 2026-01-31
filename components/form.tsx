@@ -182,7 +182,7 @@ function SubmitButton({ loadingText, children, ...props }: SubmitButtonProps) {
       <Button
         type="submit"
         form={formId}
-        className="w-full disabled:opacity-50"
+        className="w-full disabled:opacity-50 rounded-full px-4"
         disabled={isSubmitting}
         {...props}
       >
