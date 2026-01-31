@@ -4,123 +4,141 @@ export const endpoints = {
   auth: {
     refreshToken: {
       url: `${API_VERSION}/users/refresh-token`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     logout: {
       url: `${API_VERSION}/users/logout`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     login: {
       url: `${API_VERSION}/users/login`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     register: {
       url: `${API_VERSION}/users/register`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
   },
   users: {
     changePassword: {
       url: `${API_VERSION}/users/change-password`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     currentUser: {
       url: `${API_VERSION}/users/current-user`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     updateUser: {
       url: `${API_VERSION}/users/update-account`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     updateProfilePicture: {
       url: `${API_VERSION}/users/avatar`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     updateCoverImage: {
       url: `${API_VERSION}/users/cover`,
-      queryKey: 'currentUser',
+      queryKeys: ['currentUser'],
     },
     channel: {
       url: `${API_VERSION}/users/channel/{channelId}`,
-      queryKey: 'channel',
+      queryKeys: ['channel'],
       cover: {
         url: `${API_VERSION}/users/channel/{channelId}/cover`,
-        queryKey: 'channel',
+        queryKeys: ['channel'],
       },
       avatar: {
         url: `${API_VERSION}/users/channel/{channelId}/avatar`,
-        queryKey: 'channel',
+        queryKeys: ['channel'],
       },
     },
     updateWatchHistory: {
       url: `${API_VERSION}/users/update-history`,
-      queryKey: 'history',
+      queryKeys: ['history'],
     },
     history: {
       url: `${API_VERSION}/users/history`,
-      queryKey: 'history',
+      queryKeys: ['history'],
     },
   },
   videos: {
     list: {
       url: `${API_VERSION}/videos`,
-      queryKey: 'videos',
+      queryKeys: ['videos'],
     },
   },
   subscriptions: {
     list: {
       url: `${API_VERSION}/subscription/u/{userId}`,
-      queryKey: 'subscriptions',
+      queryKeys: ['subscriptions'],
     },
     toggle: {
       url: `${API_VERSION}/subscription/c/{channelId}`,
-      queryKey: 'subscribers',
+      queryKeys: ['subscribers'],
     },
     subscribers: {
       url: `${API_VERSION}/subscription/c/{channelId}`,
-      queryKey: 'subscribers',
+      queryKeys: ['subscribers'],
     },
   },
   community: {
     create: {
       url: `${API_VERSION}/tweet`,
-      queryKey: 'community',
+      queryKeys: ['community'],
     },
     list: {
       url: `${API_VERSION}/tweet/user/{userId}`,
-      queryKey: 'community',
+      queryKeys: ['community'],
     },
     update: {
       url: `${API_VERSION}/tweet/{tweetId}`,
-      queryKey: 'community',
+      queryKeys: ['community'],
     },
     delete: {
       url: `${API_VERSION}/tweet/{tweetId}`,
-      queryKey: 'community',
+      queryKeys: ['community'],
     },
   },
   playlists: {
     createPlaylist: {
       url: `${API_VERSION}/playlist`,
-      queryKey: 'playlist',
+      queryKeys: ['playlist'],
     },
     // get, patch - name and description, delete
     playlistById: {
       url: `${API_VERSION}/playlist/{playlistId}`,
-      queryKey: 'playlist',
+      queryKeys: ['playlist'],
     },
     playlistByChannelId: {
       url: `${API_VERSION}/playlist/user/{userId}`,
-      queryKey: 'playlists',
+      queryKeys: ['playlists'],
     },
     addVideoToPlaylist: {
       url: `${API_VERSION}/playlist/add/{videoId}/{playlistId}`,
-      queryKey: 'playlist',
+      queryKeys: ['playlist'],
     },
     //{ payload: { videoIds: ["videoId1", "videoId2"] } }
     removeVideoFromPlaylist: {
       url: `${API_VERSION}/playlist/remove/{videoId}/{playlistId}`,
-      queryKey: 'playlist',
+      queryKeys: ['playlist'],
+    },
+  },
+  likes: {
+    likedVideos: {
+      url: `${API_VERSION}/like/videos`,
+      queryKeys: ['likedVideos'],
+    },
+    toggleVideoLike: {
+      url: `${API_VERSION}/like/toggle/v/{videoId}`,
+      queryKeys: ['likes'],
+    },
+    toggleCommentLike: {
+      url: `${API_VERSION}/like/toggle/c/{commentId}`,
+      queryKeys: ['likes'],
+    },
+    toggleTweetLike: {
+      url: `${API_VERSION}/like/toggle/t/{tweetId}`,
+      queryKeys: ['likes'],
     },
   },
 };

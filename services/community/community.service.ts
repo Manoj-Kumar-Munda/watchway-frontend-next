@@ -16,7 +16,7 @@ interface ICommunityPost {
 
 const useCommunityPostList = (userId: string) => {
   return useQuery<ApiResponse<{ data: ICommunityPost[] }>>({
-    queryKey: [endpoints.community.list.queryKey, userId],
+    queryKey: [...endpoints.community.list.queryKeys, userId],
     queryFn: () =>
       api.get(endpoints.community.list.url.replace('{userId}', userId)),
     enabled: !!userId,
@@ -32,7 +32,7 @@ const useCreateCommunityPost = (userId: string) => {
       ),
     onSettled: () => {
       getQueryClient().invalidateQueries({
-        queryKey: [endpoints.community.list.queryKey, userId],
+        queryKey: [...endpoints.community.list.queryKeys, userId],
       });
     },
   });

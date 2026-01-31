@@ -23,7 +23,7 @@ export const useLogin = () => {
     },
     onSettled: () => {
       getQueryClient().invalidateQueries({
-        queryKey: [endpoints.users.currentUser.queryKey],
+        queryKey: endpoints.users.currentUser.queryKeys,
       });
     },
   });
@@ -31,7 +31,7 @@ export const useLogin = () => {
 
 export const useCurrentUser = () => {
   return useQuery({
-    queryKey: [endpoints.users.currentUser.queryKey],
+    queryKey: endpoints.users.currentUser.queryKeys,
     queryFn: () => {
       return api.get<ApiResponse<IUser>>(endpoints.users.currentUser.url);
     },

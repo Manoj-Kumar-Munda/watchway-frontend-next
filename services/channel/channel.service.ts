@@ -24,7 +24,7 @@ interface IChannelVideosResponse {
 
 export const useChannel = (channelId: string) => {
   return useQuery<ApiResponse<{ data: IChannel }>>({
-    queryKey: [endpoints.users.channel.queryKey, channelId],
+    queryKey: [...endpoints.users.channel.queryKeys, channelId],
     queryFn: () => {
       return api.get(
         endpoints.users.channel.url.replace('{channelId}', channelId)
@@ -36,7 +36,7 @@ export const useChannel = (channelId: string) => {
 
 export const useChannelVideos = (channelId: string) => {
   return useQuery<ApiResponse<IChannelVideosResponse>>({
-    queryKey: [endpoints.videos.list.queryKey, 'channel', channelId],
+    queryKey: [...endpoints.videos.list.queryKeys, 'channel', channelId],
     queryFn: () => {
       return api.get(`${endpoints.videos.list.url}?userId=${channelId}`);
     },
@@ -62,7 +62,7 @@ export const useUpdateChannelCoverImage = () => {
     },
     onSettled: () => {
       getQueryClient().invalidateQueries({
-        queryKey: [endpoints.users.channel.queryKey],
+        queryKey: endpoints.users.channel.queryKeys,
       });
     },
   });

@@ -10,7 +10,7 @@ const useDeletePlaylist = () => {};
 
 const useGetPlaylistById = (playlistId: string) => {
   return useQuery({
-    queryKey: [endpoints.playlists.playlistById.queryKey],
+    queryKey: endpoints.playlists.playlistById.queryKeys,
     queryFn: () => {
       return api.get(
         endpoints.playlists.playlistById.url.replace('{playlistId}', playlistId)
@@ -22,7 +22,7 @@ const useGetPlaylistById = (playlistId: string) => {
 
 const useGetPlaylistsByChannelId = (channelId: string) => {
   return useQuery({
-    queryKey: [endpoints.playlists.playlistByChannelId.queryKey],
+    queryKey: [...endpoints.playlists.playlistByChannelId.queryKeys, channelId],
     queryFn: () => {
       return api.get(
         endpoints.playlists.playlistByChannelId.url.replace(

@@ -19,7 +19,7 @@ interface ISubscriptionsResponse {
 }
 const useSubscribers = (channelId: string) => {
   return useQuery({
-    queryKey: [endpoints.subscriptions.subscribers.queryKey, channelId],
+    queryKey: [...endpoints.subscriptions.subscribers.queryKeys, channelId],
     queryFn: () =>
       api.get(
         endpoints.subscriptions.subscribers.url.replace(
@@ -33,7 +33,7 @@ const useSubscribers = (channelId: string) => {
 
 const useSubscriptions = (userId: string = '') => {
   return useQuery<ApiResponse<ISubscriptionsResponse>>({
-    queryKey: [endpoints.subscriptions.list.queryKey, userId],
+    queryKey: [...endpoints.subscriptions.list.queryKeys, userId],
     queryFn: () =>
       api.get(endpoints.subscriptions.list.url.replace('{userId}', userId)),
     enabled: !!userId,
@@ -48,7 +48,7 @@ const useToggleSubscription = () => {
       ),
     onSettled: () => {
       getQueryClient().invalidateQueries({
-        queryKey: [endpoints.subscriptions.list.queryKey],
+        queryKey: endpoints.subscriptions.list.queryKeys,
       });
     },
   });
