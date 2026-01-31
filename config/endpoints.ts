@@ -99,4 +99,28 @@ export const endpoints = {
       queryKey: 'community',
     },
   },
+  playlists: {
+    createPlaylist: {
+      url: `${API_VERSION}/playlist`,
+      queryKey: 'playlist',
+    },
+    // get, patch - name and description, delete
+    playlistById: {
+      url: `${API_VERSION}/playlist/{playlistId}`,
+      queryKey: 'playlist',
+    },
+    playlistByChannelId: {
+      url: `${API_VERSION}/playlist/user/{userId}`,
+      queryKey: 'playlists',
+    },
+    addVideoToPlaylist: {
+      url: `${API_VERSION}/playlist/add/{videoId}/{playlistId}`,
+      queryKey: 'playlist',
+    },
+    //{ payload: { videoIds: ["videoId1", "videoId2"] } }
+    removeVideoFromPlaylist: {
+      url: `${API_VERSION}/playlist/remove/{videoId}/{playlistId}`,
+      queryKey: 'playlist',
+    },
+  },
 };
