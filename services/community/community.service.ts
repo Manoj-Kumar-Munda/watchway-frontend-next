@@ -10,6 +10,10 @@ interface ICommunityPostListResponse {
   data: ICommunityPost[];
 }
 
+interface ICommunityPostResponse {
+  data: ICommunityPost;
+}
+
 const useCommunityPostList = (userId: string) => {
   return useQuery<ApiResponse<ICommunityPostListResponse>>({
     queryKey: [...endpoints.community.list.queryKeys, userId],
@@ -152,6 +156,24 @@ const usePostCommentMutation = (userId: string, postId: string) => {
   });
 };
 
+const useGetPostById = (postId: string) => {
+  return useQuery<ApiResponse<ICommunityPostResponse>>({
+    queryKey: [...endpoints.community.postById.queryKeys, postId],
+    queryFn: () =>
+      api.get(endpoints.community.postById.url.replace('{tweetId}', postId)),
+    enabled: !!postId,
+  });
+};
+
+const useGetPostComments = (postId: string) => {
+  return useQuery<ApiResponse<ICommunityPostListResponse>>({
+    queryKey: [...endpoints.community.comments.queryKeys, postId],
+    queryFn: () =>
+      api.get(endpoints.community.comments.url.replace('{tweetId}', postId)),
+    enabled: !!postId,
+  });
+};
+
 export {
   useCommunityPostList,
   useCreateCommunityPost,
@@ -159,4 +181,6 @@ export {
   useDeleteCommunityPost,
   useToggleLikeCommunityPost,
   usePostCommentMutation,
+  useGetPostById,
+  useGetPostComments,
 };

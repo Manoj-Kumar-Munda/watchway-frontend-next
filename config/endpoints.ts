@@ -90,6 +90,10 @@ export const endpoints = {
       url: `${API_VERSION}/tweet/user/{userId}`,
       queryKeys: ['community'],
     },
+    postById: {
+      url: `${API_VERSION}/tweet/{tweetId}`,
+      queryKeys: ['community'],
+    },
     update: {
       url: `${API_VERSION}/tweet/{tweetId}`,
       queryKeys: ['community'],
@@ -101,6 +105,10 @@ export const endpoints = {
     replies: {
       url: `${API_VERSION}/tweet/{tweetId}/comments`,
       queryKeys: ['community'],
+    },
+    comments: {
+      url: `${API_VERSION}/tweet/{tweetId}/comments`,
+      queryKeys: ['community', 'comments'],
     },
   },
   playlists: {
@@ -130,19 +138,23 @@ export const endpoints = {
   likes: {
     likedVideos: {
       url: `${API_VERSION}/like/videos`,
-      queryKeys: ['likedVideos'],
+      queryKeys: ['video', 'like'],
     },
     toggleVideoLike: {
       url: `${API_VERSION}/like/toggle/v/{videoId}`,
-      queryKeys: ['likes'],
+      queryKeys: ['video', 'like'],
     },
     toggleCommentLike: {
       url: `${API_VERSION}/like/toggle/c/{commentId}`,
-      queryKeys: ['likes'],
+      queryKeys: ['comment', 'like'],
     },
     toggleTweetLike: {
       url: `${API_VERSION}/like/toggle/t/{tweetId}`,
-      queryKeys: ['likes'],
+      queryKeys: ['community', 'like'],
+    },
+    likeStatus: {
+      url: `${API_VERSION}/like/status?resource={resourceType}&id={resourceId}`,
+      queryKeys: ['like'],
     },
   },
 };
