@@ -3,7 +3,9 @@
 import { useCommunityPostList } from '@/services/community/community.service';
 import { useParams } from 'next/navigation';
 import { ChannelPostsSkeleton } from '../../../_components/skeletons';
-import CommunityPost from '../../../../../components/post';
+import CommunityPost from '@/components/post-layout';
+import PostCTAs from './post-ctas';
+import { ICommunityPost } from '@/types';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
@@ -22,9 +24,17 @@ const ChannelCommunityPostsList = () => {
   return (
     <div className="space-y-4 w-full">
       {posts?.map((post) => (
-        <CommunityPost key={post._id} post={post} />
+        <Post key={post._id} post={post} />
       ))}
     </div>
+  );
+};
+
+const Post = ({ post }: { post: ICommunityPost }) => {
+  return (
+    <CommunityPost post={post}>
+      <PostCTAs post={post} />
+    </CommunityPost>
   );
 };
 
