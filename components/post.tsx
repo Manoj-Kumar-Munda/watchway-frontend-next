@@ -2,10 +2,10 @@ import { ICommunityPost } from '@/types';
 import { formatTimeAgo } from '@/utils/helpers';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
-import PostLikeButton from './post-like-button';
-import ReplyButton from './reply-button';
+import PostLikeButton from '../app/channel/[id]/community/_components/post-like-button';
+import ReplyButton from '../app/channel/[id]/community/_components/reply-button';
 import { useState } from 'react';
-import PostReplyForm from './post-reply-form';
+import PostReplyForm from '../app/channel/[id]/community/_components/post-reply-form';
 
 interface ICommunityPostProps {
   post: ICommunityPost;

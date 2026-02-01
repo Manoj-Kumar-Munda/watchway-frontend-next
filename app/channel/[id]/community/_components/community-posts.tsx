@@ -3,7 +3,7 @@
 import { useCommunityPostList } from '@/services/community/community.service';
 import { useParams } from 'next/navigation';
 import { ChannelPostsSkeleton } from '../../../_components/skeletons';
-import CommunityPost from './post';
+import CommunityPost from '../../../../../components/post';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
