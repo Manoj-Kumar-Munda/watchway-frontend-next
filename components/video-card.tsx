@@ -1,40 +1,56 @@
+'use client';
+
 import * as React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { formatTimeAgo, formatViews } from '@/utils/helpers';
 
 interface CardProps {
   orientation: 'horizontal' | 'vertical';
   size?: 'default' | 'full';
+  videoId?: string;
 }
 
 const VideoCardContext = React.createContext<CardProps>({
   orientation: 'vertical',
   size: 'default',
+  videoId: undefined,
 });
 
 const Card = ({
   orientation,
   children,
   size,
+  videoId,
   ...props
 }: React.ComponentProps<'div'> & CardProps) => {
+  const cardContent = (
+    <div
+      {...props}
+      className={cn(
+        'flex flex-col w-full rounded-md overflow-hidden transition-all duration-300 ease-in-out relative hover:scale-105 hover:bg-gray-100/70 max-w-sm',
+        {
+          'flex-row': orientation === 'horizontal',
+          'flex-col ': orientation === 'vertical',
+        }
+      )}
+    >
+      {children}
+    </div>
+  );
+
   return (
-    <VideoCardContext value={{ orientation, size }}>
-      <div
-        {...props}
-        className={cn(
-          'flex flex-col w-full rounded-md overflow-hidden transition-all duration-300 ease-in-out relative hover:scale-105 hover:bg-gray-100/70 max-w-sm',
-          {
-            'flex-row': orientation === 'horizontal',
-            'flex-col ': orientation === 'vertical',
-          }
-        )}
-      >
-        {children}
-      </div>
+    <VideoCardContext value={{ orientation, size, videoId }}>
+      {videoId ? (
+        <Link href={`/watch/${videoId}`} className="block">
+          {cardContent}
+        </Link>
+      ) : (
+        cardContent
+      )}
     </VideoCardContext>
   );
 };
@@ -101,7 +117,27 @@ const ChannelAvatar = ({
   channelName: string;
   channelId: string;
 }) => {
-  const { orientation } = React.useContext(VideoCardContext);
+  const router = useRouter();
+  const { orientation, videoId } = React.useContext(VideoCardContext);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/channel/${channelId}`);
+  };
+
+  // If card is wrapped in Link, use div with onClick to avoid nested anchors
+  if (videoId) {
+    return (
+      <div onClick={handleClick} className="cursor-pointer">
+        <Avatar size={orientation === 'horizontal' ? 'sm' : 'lg'}>
+          <AvatarImage src={src} />
+          <AvatarFallback>{channelName.charAt(0)}</AvatarFallback>
+        </Avatar>
+      </div>
+    );
+  }
+
   return (
     <Link href={`/channel/${channelId}`}>
       <Avatar size={orientation === 'horizontal' ? 'sm' : 'lg'}>
@@ -123,7 +159,29 @@ const ChannelMeta = ({
   channelId: string;
   className?: string;
 }) => {
-  const { orientation } = React.useContext(VideoCardContext);
+  const router = useRouter();
+  const { orientation, videoId } = React.useContext(VideoCardContext);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/channel/${channelId}`);
+  };
+
+  const channelNameElement = (
+    <p
+      className={cn(
+        'text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors',
+        {
+          'text-xs': orientation === 'horizontal',
+          'text-sm': orientation === 'vertical',
+        }
+      )}
+    >
+      {channelName}
+    </p>
+  );
+
   return (
     <div className={cn('flex items-center gap-2', className)}>
       {orientation === 'horizontal' && (
@@ -133,19 +191,13 @@ const ChannelMeta = ({
           channelId={channelId}
         />
       )}
-      <Link href={`/channel/${channelId}`}>
-        <p
-          className={cn(
-            'text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors',
-            {
-              'text-xs': orientation === 'horizontal',
-              'text-sm': orientation === 'vertical',
-            }
-          )}
-        >
-          {channelName}
-        </p>
-      </Link>
+      {videoId ? (
+        <div onClick={handleClick} className="cursor-pointer">
+          {channelNameElement}
+        </div>
+      ) : (
+        <Link href={`/channel/${channelId}`}>{channelNameElement}</Link>
+      )}
     </div>
   );
 };
