@@ -108,7 +108,14 @@ const useToggleLikeCommunityPost = (postId: string) => {
         ...endpoints.likes.likeStatus.queryKeys,
         'tweet',
         postId,
-      ]);
+      ]) as ApiResponse<ILikeStatusResponse>;
+
+      previousData.data.data = {
+        isLiked: !previousData.data.data.isLiked,
+        likeCount: previousData.data.data.isLiked
+          ? previousData.data.data.likeCount - 1
+          : previousData.data.data.likeCount + 1,
+      };
 
       return { previousData };
     },
@@ -126,4 +133,56 @@ const useToggleLikeCommunityPost = (postId: string) => {
   });
 };
 
-export { useLikeStatus, useBatchLikeStatus, useToggleLikeCommunityPost };
+const useToggleCommentLike = (commentId: string) => {
+  const queryClient = getQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.likes.toggleCommentLike.url.replace('{commentId}', commentId)
+      ),
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: [
+          ...endpoints.likes.likeStatus.queryKeys,
+          'comment',
+          commentId,
+        ],
+      });
+
+      const previousData = queryClient.getQueryData([
+        ...endpoints.likes.likeStatus.queryKeys,
+        'comment',
+        commentId,
+      ]) as ApiResponse<ILikeStatusResponse>;
+
+      previousData.data.data = {
+        isLiked: !previousData?.data?.data?.isLiked,
+        likeCount: previousData?.data?.data?.isLiked
+          ? previousData?.data?.data?.likeCount - 1
+          : previousData?.data?.data?.likeCount + 1,
+      };
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        [...endpoints.likes.likeStatus.queryKeys, 'comment', commentId],
+        context?.previousData
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          ...endpoints.likes.likeStatus.queryKeys,
+          'comment',
+          commentId,
+        ],
+      });
+    },
+  });
+};
+export {
+  useLikeStatus,
+  useBatchLikeStatus,
+  useToggleLikeCommunityPost,
+  useToggleCommentLike,
+};

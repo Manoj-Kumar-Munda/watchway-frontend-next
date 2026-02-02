@@ -2,22 +2,18 @@
 
 import ToggleLikeButton from '@/components/toogle-like-button';
 import { ICommunityPost as IComment } from '@/types';
-import { useToggleLikeCommunityPost } from '@/services/community/community.service';
-import { useUserStore } from '@/store';
 import { usePathname, useRouter } from 'next/navigation';
-import { useLikeStatus } from '@/services/likes/likes.service';
+import {
+  useLikeStatus,
+  useToggleCommentLike,
+} from '@/services/likes/likes.service';
 
 const CommentLikeButton = ({ post }: { post: IComment }) => {
-  const user = useUserStore((state) => state.user);
   const router = useRouter();
   const pathname = usePathname();
-  const { data } = useLikeStatus('comment', post._id, user?._id);
+  const { data } = useLikeStatus('comment', post._id);
 
-  //TODO: change to useToggleLikeCommunityPost
-  const { mutateAsync: toggleLike } = useToggleLikeCommunityPost(
-    post._id,
-    user?._id || ''
-  );
+  const { mutateAsync: toggleLike } = useToggleCommentLike(post._id);
 
   const handleToggleLike = () => {
     if (pathname.includes('/channel')) {
@@ -30,7 +26,7 @@ const CommentLikeButton = ({ post }: { post: IComment }) => {
   return (
     <ToggleLikeButton
       isLiked={!!data?.data?.data?.isLiked}
-      likeCount={post.likeCount}
+      likeCount={data?.data?.data?.likeCount ?? 0}
       onToggle={handleToggleLike}
     />
   );
