@@ -3,7 +3,7 @@ import { IVideo } from '@/types';
 
 const VerticalVideoCard = ({ video }: { video: IVideo }) => {
   return (
-    <VideoCardRoot.Card orientation="vertical">
+    <VideoCardRoot.Card orientation="vertical" videoId={video._id}>
       <VideoCardRoot.Thumbnail src={video.thumbnail} />
 
       <div className="flex flex-row gap-2 p-2">

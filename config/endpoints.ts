@@ -66,6 +66,10 @@ export const endpoints = {
       url: `${API_VERSION}/videos`,
       queryKeys: ['videos'],
     },
+    get: {
+      url: `${API_VERSION}/videos/{videoId}`,
+      queryKeys: ['videos'],
+    },
   },
   subscriptions: {
     list: {
