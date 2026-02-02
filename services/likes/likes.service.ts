@@ -65,8 +65,6 @@ const useBatchLikeStatus = (body: {
       );
 
       if (response?.data) {
-        console.log(response.data);
-
         response.data.data.forEach((item) => {
           queryClient.setQueryData(
             [

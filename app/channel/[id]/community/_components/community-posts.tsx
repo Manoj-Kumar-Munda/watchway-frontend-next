@@ -14,12 +14,14 @@ const ChannelCommunityPostsList = () => {
 
   const postIds = data?.data?.data?.map((post) => post._id) ?? [];
 
-  useBatchLikeStatus({
-    resourceType: 'tweet',
-    resourceIds: postIds,
-  });
+  const { data: likeStatus, isPending: likeStatusPending } = useBatchLikeStatus(
+    {
+      resourceType: 'tweet',
+      resourceIds: postIds,
+    }
+  );
 
-  if (isPending) {
+  if (isPending || likeStatusPending) {
     return <ChannelPostsSkeleton count={4} />;
   }
 
