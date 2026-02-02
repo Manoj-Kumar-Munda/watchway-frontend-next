@@ -47,4 +47,10 @@ const formatTimeAgo = (timestamp: string) => {
   return `${years} years ago`;
 };
 
+//cloudinary
+export const extractPublicVideoId = (url: string) => {
+  const videoId = url.split('/')?.at(-1)?.split('.')[0];
+  return videoId;
+};
+
 export { formatViews, formatTimeAgo, isNotShowSidebar };

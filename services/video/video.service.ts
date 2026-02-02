@@ -20,11 +20,20 @@ interface IVideoListResponse {
 
 const useVideoList = () => {
   return useQuery<ApiResponse<IVideoListResponse>>({
-    queryKey: [endpoints.videos.list.url],
+    queryKey: endpoints.videos.list.queryKeys,
     queryFn: () => {
       return api.get(endpoints.videos.list.url);
     },
   });
 };
 
-export { useVideoList };
+const useGetVideo = (videoId: string) => {
+  return useQuery<ApiResponse<{ data: IVideo[] }>>({
+    queryKey: [...endpoints.videos.list.queryKeys, videoId],
+    queryFn: () => {
+      return api.get(endpoints.videos.get.url.replace('{videoId}', videoId));
+    },
+  });
+};
+
+export { useVideoList, useGetVideo };
