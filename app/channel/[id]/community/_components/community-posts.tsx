@@ -6,10 +6,18 @@ import { ChannelPostsSkeleton } from '../../../_components/skeletons';
 import CommunityPost from '@/components/post-layout';
 import PostCTAs from './post-ctas';
 import { ICommunityPost } from '@/types';
+import { useBatchLikeStatus } from '@/services/likes/likes.service';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
   const { data, isPending, error } = useCommunityPostList(id as string);
+
+  const postIds = data?.data?.data?.map((post) => post._id) ?? [];
+
+  useBatchLikeStatus({
+    resourceType: 'tweet',
+    resourceIds: postIds,
+  });
 
   if (isPending) {
     return <ChannelPostsSkeleton count={4} />;
@@ -30,7 +38,11 @@ const ChannelCommunityPostsList = () => {
   );
 };
 
-const Post = ({ post }: { post: ICommunityPost }) => {
+interface PostProps {
+  post: ICommunityPost;
+}
+
+const Post = ({ post }: PostProps) => {
   return (
     <CommunityPost post={post}>
       <PostCTAs post={post} />

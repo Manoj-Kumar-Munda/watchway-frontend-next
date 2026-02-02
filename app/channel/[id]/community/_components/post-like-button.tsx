@@ -2,17 +2,18 @@
 
 import ToggleLikeButton from '@/components/toogle-like-button';
 import { ICommunityPost } from '@/types';
-import { useToggleLikeCommunityPost } from '@/services/community/community.service';
-import { useUserStore } from '@/store';
-import { useLikeStatus } from '@/services/likes/likes.service';
+import {
+  useLikeStatus,
+  useToggleLikeCommunityPost,
+} from '@/services/likes/likes.service';
 
-const PostLikeButton = ({ post }: { post: ICommunityPost }) => {
-  const user = useUserStore((state) => state.user);
-  const { data } = useLikeStatus('tweet', post._id, user?._id);
-  const { mutateAsync: toggleLike } = useToggleLikeCommunityPost(
-    post._id,
-    user?._id || ''
-  );
+interface PostLikeButtonProps {
+  post: ICommunityPost;
+}
+
+const PostLikeButton = ({ post }: PostLikeButtonProps) => {
+  const { data } = useLikeStatus('tweet', post._id);
+  const { mutateAsync: toggleLike } = useToggleLikeCommunityPost(post._id);
 
   const handleToggleLike = () => {
     toggleLike();
@@ -20,8 +21,8 @@ const PostLikeButton = ({ post }: { post: ICommunityPost }) => {
 
   return (
     <ToggleLikeButton
-      isLiked={!!data?.data?.data?.isLiked}
-      likeCount={post.likeCount}
+      isLiked={data?.data?.data?.isLiked ?? false}
+      likeCount={data?.data?.data?.likeCount ?? post.likeCount}
       onToggle={handleToggleLike}
     />
   );

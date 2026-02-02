@@ -6,7 +6,7 @@ import { getQueryClient } from '@/lib/query-client';
 import { CommunityPostFormValidationSchema as CreatePostPayload } from '@/app/channel/[id]/community/_components/community-post-form';
 import { ICommunityPost } from '@/types';
 
-interface ICommunityPostListResponse {
+export interface ICommunityPostListResponse {
   data: ICommunityPost[];
 }
 
@@ -41,64 +41,6 @@ const useCreateCommunityPost = (userId: string) => {
 const useUpdateCommunityPost = () => {};
 
 const useDeleteCommunityPost = () => {};
-
-const useToggleLikeCommunityPost = (postId: string, userId: string) => {
-  const queryClient = getQueryClient();
-  return useMutation({
-    mutationFn: () =>
-      api.post<ApiResponse<ICommunityPost>>(
-        endpoints.likes.toggleTweetLike.url.replace('{tweetId}', postId)
-      ),
-    onMutate: async () => {
-      await queryClient.cancelQueries({
-        queryKey: [...endpoints.community.list.queryKeys, userId],
-      });
-      const previousData = queryClient.getQueryData([
-        ...endpoints.community.list.queryKeys,
-        userId,
-      ]);
-      queryClient.setQueryData(
-        [...endpoints.community.list.queryKeys, userId],
-        (oldData: ApiResponse<ICommunityPostListResponse> | undefined) => {
-          if (!oldData || !oldData.data?.data) return oldData;
-
-          const updatedData = oldData.data.data.map((post) => {
-            if (post._id === postId) {
-              return {
-                ...post,
-                isLiked: !post.isLiked,
-                likeCount: post.isLiked
-                  ? post.likeCount - 1
-                  : post.likeCount + 1,
-              };
-            }
-            return post;
-          });
-
-          return {
-            ...oldData,
-            data: {
-              ...oldData.data,
-              data: updatedData,
-            },
-          };
-        }
-      );
-      return { previousData };
-    },
-    onError: (_, __, context) => {
-      queryClient.setQueryData(
-        [...endpoints.community.list.queryKeys, userId],
-        context?.previousData
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [...endpoints.community.list.queryKeys, userId],
-      });
-    },
-  });
-};
 
 const usePostCommentMutation = (userId: string, postId: string) => {
   const queryClient = getQueryClient();
@@ -179,7 +121,6 @@ export {
   useCreateCommunityPost,
   useUpdateCommunityPost,
   useDeleteCommunityPost,
-  useToggleLikeCommunityPost,
   usePostCommentMutation,
   useGetPostById,
   useGetPostComments,

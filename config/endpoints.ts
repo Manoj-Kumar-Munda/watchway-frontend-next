@@ -156,5 +156,9 @@ export const endpoints = {
       url: `${API_VERSION}/like/status?resource={resourceType}&id={resourceId}`,
       queryKeys: ['like'],
     },
+    batchLikeStatus: {
+      url: `${API_VERSION}/like/status/batch`,
+      queryKeys: ['like'],
+    },
   },
 };

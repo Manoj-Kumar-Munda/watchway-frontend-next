@@ -3,7 +3,11 @@ import ReplyButton from '@/components/reply-button';
 import { ICommunityPost } from '@/types';
 import { useRouter } from 'next/navigation';
 
-const PostCTAs = ({ post }: { post: ICommunityPost }) => {
+interface PostCTAsProps {
+  post: ICommunityPost;
+}
+
+const PostCTAs = ({ post }: PostCTAsProps) => {
   const router = useRouter();
   const handleShowReplyForm = () => {
     router.push(`/post/${post._id}`);
