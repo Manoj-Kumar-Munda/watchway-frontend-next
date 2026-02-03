@@ -1,12 +1,15 @@
 'use client';
 
 import { useCommunityPostList } from '@/services/community/community.service';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ChannelPostsSkeleton } from '../../../_components/skeletons';
-import CommunityPost from '@/components/post-layout';
-import PostCTAs from './post-ctas';
+import { Post } from '@/components/post';
 import { ICommunityPost } from '@/types';
-import { useBatchLikeStatus } from '@/services/likes/likes.service';
+import {
+  useBatchLikeStatus,
+  useLikeStatus,
+} from '@/services/likes/likes.service';
+import { useToggleLikeCommunityPost } from '@/services/likes/likes.service';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
@@ -34,21 +37,49 @@ const ChannelCommunityPostsList = () => {
   return (
     <div className="space-y-4 w-full">
       {posts?.map((post) => (
-        <Post key={post._id} post={post} />
+        <CommunityPostItem key={post._id} post={post} />
       ))}
     </div>
   );
 };
 
-interface PostProps {
+interface CommunityPostItemProps {
   post: ICommunityPost;
 }
 
-const Post = ({ post }: PostProps) => {
+const CommunityPostItem = ({ post }: CommunityPostItemProps) => {
+  const router = useRouter();
+  const { mutate: toggleLike, isPending } = useToggleLikeCommunityPost(
+    post._id
+  );
+
+  const { data: likeStatus } = useLikeStatus('tweet', post._id);
+
+  const handleLikeClick = () => {
+    toggleLike();
+  };
+
+  const handleCommentClick = () => {
+    router.push(`/post/${post._id}`);
+  };
+
   return (
-    <CommunityPost post={post}>
-      <PostCTAs post={post} />
-    </CommunityPost>
+    <Post.Root data={post}>
+      <Post.OwnerAvatar />
+      <Post.Body>
+        <Post.Header />
+        <Post.Content />
+        <Post.Actions>
+          <Post.LikeButton
+            onClick={handleLikeClick}
+            disabled={isPending}
+            isLiked={likeStatus?.data?.data?.isLiked}
+            likeCount={likeStatus?.data?.data?.likeCount}
+          />
+          <Post.CommentButton onClick={handleCommentClick} />
+        </Post.Actions>
+      </Post.Body>
+    </Post.Root>
   );
 };
 

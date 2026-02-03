@@ -1,12 +1,10 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useGetPostById } from '@/services/community/community.service';
-import CommunityPost from '@/components/post-layout';
 import { ChannelPostsSkeleton } from '@/app/channel/_components/skeletons';
-import { Card } from '@/components/ui/card';
 import CommentsSection from '@/components/comments-section';
-import PostCTAs from '@/app/channel/[id]/community/_components/post-ctas';
+import PostCard from './_components/post-card';
 
 const PostPage = () => {
   const params = useParams();
@@ -21,12 +19,7 @@ const PostPage = () => {
 
   return (
     <div className="space-y-4">
-      <Card>
-        <CommunityPost post={post}>
-          <PostCTAs post={post} />
-        </CommunityPost>
-      </Card>
-
+      <PostCard post={post} />
       <CommentsSection />
     </div>
   );
