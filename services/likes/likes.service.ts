@@ -141,6 +141,7 @@ const useToggleCommentLike = (commentId: string) => {
         endpoints.likes.toggleCommentLike.url.replace('{commentId}', commentId)
       ),
     onMutate: async () => {
+      // Cancel any outgoing refetches
       await queryClient.cancelQueries({
         queryKey: [
           ...endpoints.likes.likeStatus.queryKeys,
@@ -149,25 +150,87 @@ const useToggleCommentLike = (commentId: string) => {
         ],
       });
 
+      // Get the previous individual like status data
       const previousData = queryClient.getQueryData([
         ...endpoints.likes.likeStatus.queryKeys,
         'comment',
         commentId,
-      ]) as ApiResponse<ILikeStatusResponse>;
+      ]) as ApiResponse<ILikeStatusResponse> | undefined;
 
-      previousData.data.data = {
-        isLiked: !previousData?.data?.data?.isLiked,
-        likeCount: previousData?.data?.data?.isLiked
-          ? previousData?.data?.data?.likeCount - 1
-          : previousData?.data?.data?.likeCount + 1,
-      };
-      return { previousData };
+      // Get all batch like status queries to find the one containing this comment
+      const batchQueries = queryClient.getQueriesData<
+        ApiResponse<IBatchLikeStatusResponse>
+      >({
+        queryKey: [...endpoints.likes.likeStatus.queryKeys, 'comment'],
+      });
+
+      // Find the batch query that contains this commentId
+      let previousBatchData:
+        | {
+            queryKey: readonly unknown[];
+            data: ApiResponse<IBatchLikeStatusResponse>;
+          }
+        | undefined;
+
+      for (const [queryKey, data] of batchQueries) {
+        if (data?.data?.some((item) => item.resourceId === commentId)) {
+          previousBatchData = { queryKey, data };
+          break;
+        }
+      }
+
+      const wasLiked = previousData?.data?.data?.isLiked;
+      const previousLikeCount = previousData?.data?.data?.likeCount ?? 0;
+      const newIsLiked = !wasLiked;
+      const newLikeCount = wasLiked
+        ? previousLikeCount - 1
+        : previousLikeCount + 1;
+
+      // Update individual like status cache
+      if (previousData) {
+        queryClient.setQueryData(
+          [...endpoints.likes.likeStatus.queryKeys, 'comment', commentId],
+          {
+            ...previousData,
+            data: {
+              ...previousData.data,
+              data: {
+                isLiked: newIsLiked,
+                likeCount: newLikeCount,
+              },
+            },
+          } as ApiResponse<ILikeStatusResponse>
+        );
+      }
+
+      // Update batch like status cache
+      if (previousBatchData?.data) {
+        const updatedBatchData = {
+          ...previousBatchData.data,
+          data: previousBatchData.data.data.map((item) =>
+            item.resourceId === commentId
+              ? { ...item, isLiked: newIsLiked, likeCount: newLikeCount }
+              : item
+          ),
+        };
+        queryClient.setQueryData(previousBatchData.queryKey, updatedBatchData);
+      }
+
+      return { previousData, previousBatchData };
     },
     onError: (_, __, context) => {
-      queryClient.setQueryData(
-        [...endpoints.likes.likeStatus.queryKeys, 'comment', commentId],
-        context?.previousData
-      );
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          [...endpoints.likes.likeStatus.queryKeys, 'comment', commentId],
+          context.previousData
+        );
+      }
+      if (context?.previousBatchData) {
+        queryClient.setQueryData(
+          context.previousBatchData.queryKey,
+          context.previousBatchData.data
+        );
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
