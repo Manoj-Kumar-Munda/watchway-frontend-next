@@ -1,4 +1,5 @@
 import VideoPlayer from './_components/video-player';
+import VideoComments from './_components/video-comments';
 
 const WatchPage = async ({
   params,
@@ -7,8 +8,9 @@ const WatchPage = async ({
 }) => {
   const { videoId } = await params;
   return (
-    <div>
+    <div className="space-y-6">
       <VideoPlayer videoId={videoId} />
+      <VideoComments videoId={videoId} />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../types';
-import { IVideo } from '@/types';
+import { ICommunityPost, IVideo } from '@/types';
 
 interface IVideoListResponse {
   data: {
@@ -36,4 +36,27 @@ const useGetVideo = (videoId: string) => {
   });
 };
 
-export { useVideoList, useGetVideo };
+interface IVideoCommentsResponse {
+  data: {
+    docs: ICommunityPost[];
+    totalDocs: number;
+    limit: number;
+    totalPages: number;
+    page: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+    nextPage: number | null;
+    prevPage: number | null;
+  };
+}
+
+const useGetVideoComments = (videoId: string) => {
+  return useQuery<ApiResponse<IVideoCommentsResponse>>({
+    queryKey: [...endpoints.videos.comments.queryKeys, videoId],
+    queryFn: () =>
+      api.get(endpoints.videos.comments.url.replace('{videoId}', videoId)),
+    enabled: !!videoId,
+  });
+};
+
+export { useVideoList, useGetVideo, useGetVideoComments };

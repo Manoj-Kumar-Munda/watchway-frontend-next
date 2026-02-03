@@ -70,6 +70,10 @@ export const endpoints = {
       url: `${API_VERSION}/videos/{videoId}`,
       queryKeys: ['videos'],
     },
+    comments: {
+      url: `${API_VERSION}/comments/{videoId}`,
+      queryKeys: ['videos', 'comments'],
+    },
   },
   subscriptions: {
     list: {
