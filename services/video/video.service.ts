@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../types';
 import { ICommunityPost, IVideo } from '@/types';
 import { getQueryClient } from '@/lib/query-client';
+import { useUserStore } from '@/store';
 
 interface IVideoListResponse {
   data: {
@@ -61,45 +62,54 @@ const useGetVideoComments = (videoId: string) => {
 };
 
 const useVideoCommentMutation = (videoId: string) => {
+  const user = useUserStore((state) => state.user);
   const queryClient = getQueryClient();
   return useMutation({
     mutationFn: (data: { content: string }) =>
-      api.post<ApiResponse<ICommunityPost>>(
+      api.post<ApiResponse<{ data: ICommunityPost }>>(
         endpoints.videos.comments.url.replace('{videoId}', videoId),
         data
       ),
-    onMutate: async () => {
+    onMutate: async (newComment) => {
       await queryClient.cancelQueries({
         queryKey: [...endpoints.videos.comments.queryKeys, videoId],
       });
       const previousData = queryClient.getQueryData([
         ...endpoints.videos.comments.queryKeys,
         videoId,
-      ]);
-      queryClient.setQueryData(
-        [...endpoints.videos.comments.queryKeys, videoId],
-        (oldData: ApiResponse<IVideoCommentsResponse> | undefined) => {
-          if (!oldData || !oldData.data?.data) return oldData;
+      ]) as ApiResponse<IVideoCommentsResponse> | undefined;
 
-          const updatedData = oldData.data.data.docs.map((comment) => {
-            if (comment._id === videoId) {
-              return {
-                ...comment,
-                comments: comment.comments + 1,
-              };
-            }
-            return comment;
-          });
+      // Create optimistic comment
+      const optimisticComment: ICommunityPost = {
+        _id: `temp-${Date.now()}`,
+        content: newComment.content,
+        owner: {
+          _id: user?._id ?? '',
+          username: user?.username ?? '',
+          avatar: user?.avatar ?? '',
+        },
+        isLiked: false,
+        likeCount: 0,
+        comments: 0,
+        createdAt: new Date().toISOString(),
+      };
 
-          return {
-            ...oldData,
+      if (previousData) {
+        queryClient.setQueryData(
+          [...endpoints.videos.comments.queryKeys, videoId],
+          {
+            ...previousData,
             data: {
-              ...oldData.data,
-              data: updatedData,
+              ...previousData.data,
+              data: {
+                ...previousData.data.data,
+                docs: [...previousData.data.data.docs, optimisticComment],
+                totalDocs: previousData.data.data.totalDocs + 1,
+              },
             },
-          };
-        }
-      );
+          }
+        );
+      }
       return { previousData };
     },
     onError: (_, __, context) => {
@@ -109,6 +119,8 @@ const useVideoCommentMutation = (videoId: string) => {
       );
     },
     onSettled: () => {
+      // Invalidate the query to refetch fresh data from the server
+      // This replaces the temp optimistic comment with the actual server data
       queryClient.invalidateQueries({
         queryKey: [...endpoints.videos.comments.queryKeys, videoId],
       });

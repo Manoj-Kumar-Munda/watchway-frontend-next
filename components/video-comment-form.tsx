@@ -20,10 +20,6 @@ const VideoCommentForm = ({ videoId, onCancel }: VideoCommentFormProps) => {
         onError: () => {
           toast.error('Failed to post comment');
         },
-        onSuccess: () => {
-          toast.success('Comment posted successfully');
-          onCancel?.();
-        },
       }
     );
   };

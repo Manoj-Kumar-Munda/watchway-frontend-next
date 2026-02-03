@@ -22,10 +22,6 @@ const PostReplyForm = ({ postId, onCancel }: IPostReplyFormProps) => {
         onError: () => {
           toast.error('Failed to post comment');
         },
-        onSuccess: () => {
-          toast.success('Comment posted successfully');
-          onCancel?.();
-        },
       }
     );
   };
