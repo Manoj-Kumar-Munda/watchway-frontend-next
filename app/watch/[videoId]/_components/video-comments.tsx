@@ -1,6 +1,7 @@
 'use client';
 
 import CommentsSection from '@/components/comments-section';
+import VideoCommentForm from '@/components/video-comment-form';
 import { useGetVideoComments } from '@/services/video/video.service';
 
 interface VideoCommentsProps {
@@ -17,8 +18,9 @@ const VideoComments = ({ videoId }: VideoCommentsProps) => {
       comments={comments}
       isLoading={isPending}
       error={error as Error | null}
-      postId={videoId}
-    />
+    >
+      <VideoCommentForm videoId={videoId} />
+    </CommentsSection>
   );
 };
 

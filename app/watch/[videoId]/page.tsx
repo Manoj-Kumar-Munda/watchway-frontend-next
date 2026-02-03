@@ -8,7 +8,7 @@ const WatchPage = async ({
 }) => {
   const { videoId } = await params;
   return (
-    <div className="space-y-6">
+    <div className="space-y-12 max-w-2xl mx-auto">
       <VideoPlayer videoId={videoId} />
       <VideoComments videoId={videoId} />
     </div>

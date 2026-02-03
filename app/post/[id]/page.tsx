@@ -7,6 +7,7 @@ import {
 } from '@/services/community/community.service';
 import { ChannelPostsSkeleton } from '@/app/channel/_components/skeletons';
 import CommentsSection from '@/components/comments-section';
+import PostReplyForm from '@/components/post-reply-form';
 import PostCard from './_components/post-card';
 
 const PostPage = () => {
@@ -32,8 +33,9 @@ const PostPage = () => {
         comments={commentsData?.data?.data}
         isLoading={commentsPending}
         error={commentsError as Error | null}
-        postId={postId}
-      />
+      >
+        <PostReplyForm postId={postId} />
+      </CommentsSection>
     </div>
   );
 };

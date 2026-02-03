@@ -1,8 +1,9 @@
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiResponse } from '../types';
 import { ICommunityPost, IVideo } from '@/types';
+import { getQueryClient } from '@/lib/query-client';
 
 interface IVideoListResponse {
   data: {
@@ -59,4 +60,65 @@ const useGetVideoComments = (videoId: string) => {
   });
 };
 
-export { useVideoList, useGetVideo, useGetVideoComments };
+const useVideoCommentMutation = (videoId: string) => {
+  const queryClient = getQueryClient();
+  return useMutation({
+    mutationFn: (data: { content: string }) =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.videos.comments.url.replace('{videoId}', videoId),
+        data
+      ),
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: [...endpoints.videos.comments.queryKeys, videoId],
+      });
+      const previousData = queryClient.getQueryData([
+        ...endpoints.videos.comments.queryKeys,
+        videoId,
+      ]);
+      queryClient.setQueryData(
+        [...endpoints.videos.comments.queryKeys, videoId],
+        (oldData: ApiResponse<IVideoCommentsResponse> | undefined) => {
+          if (!oldData || !oldData.data?.data) return oldData;
+
+          const updatedData = oldData.data.data.docs.map((comment) => {
+            if (comment._id === videoId) {
+              return {
+                ...comment,
+                comments: comment.comments + 1,
+              };
+            }
+            return comment;
+          });
+
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              data: updatedData,
+            },
+          };
+        }
+      );
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        [...endpoints.videos.comments.queryKeys, videoId],
+        context?.previousData
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...endpoints.videos.comments.queryKeys, videoId],
+      });
+    },
+  });
+};
+
+export {
+  useVideoList,
+  useGetVideo,
+  useGetVideoComments,
+  useVideoCommentMutation,
+};

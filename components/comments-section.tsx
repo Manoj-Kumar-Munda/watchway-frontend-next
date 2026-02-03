@@ -1,27 +1,22 @@
-import { usePostCommentMutation } from '@/services/community/community.service';
 import { Post } from './post';
 import {
   useBatchLikeStatus,
   useToggleCommentLike,
 } from '@/services/likes/likes.service';
 import { ICommunityPost } from '@/types';
-import { useUserStore } from '@/store';
-import { toast } from 'sonner';
-import CommentForm from './comment-form';
 
 interface CommentsSectionProps {
   comments: ICommunityPost[] | undefined;
   isLoading: boolean;
   error?: Error | null;
-  postId: string;
-  resourceType?: 'tweet' | 'comment';
+  children?: React.ReactNode;
 }
 
 const CommentsSection = ({
   comments,
   isLoading,
   error,
-  postId,
+  children,
 }: CommentsSectionProps) => {
   const commentIds = comments?.map((comment) => comment._id) ?? [];
   const { data: likeStatus } = useBatchLikeStatus({
@@ -48,7 +43,7 @@ const CommentsSection = ({
   return (
     <div className="space-y-4">
       <h2 className="font-semibold">{comments?.length ?? 0} Comments</h2>
-      <PostReplyForm postId={postId} />
+      {children}
       {comments?.length === 0 && (
         <p className="text-sm text-muted-foreground">No comments yet.</p>
       )}
@@ -93,43 +88,6 @@ const CommentItem = ({ comment, isLiked, likeCount }: CommentItemProps) => {
         </Post.Actions>
       </Post.Body>
     </Post.Root>
-  );
-};
-
-interface IPostReplyFormProps {
-  postId: string;
-  onCancel?: () => void;
-}
-
-const PostReplyForm = ({ postId, onCancel }: IPostReplyFormProps) => {
-  'use client';
-  const userId = useUserStore((state) => state.user?._id);
-  const { mutateAsync: postComment, isPending } = usePostCommentMutation(
-    userId!,
-    postId
-  );
-
-  const handleSubmit = (comment: string) => {
-    postComment(
-      { content: comment },
-      {
-        onError: () => {
-          toast.error('Failed to post comment');
-        },
-        onSuccess: () => {
-          toast.success('Comment posted successfully');
-          onCancel?.();
-        },
-      }
-    );
-  };
-  return (
-    <CommentForm
-      label="Reply"
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      disabled={isPending}
-    />
   );
 };
 
