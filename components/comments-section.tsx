@@ -3,8 +3,12 @@
 import PostReplyForm from '@/components/post-reply-form';
 import { useGetPostComments } from '@/services/community/community.service';
 import { useParams } from 'next/navigation';
-import Comment from './post-layout';
-import CommentCTAs from './comment-ctas';
+import { Post } from './post';
+import {
+  useLikeStatus,
+  useToggleCommentLike,
+} from '@/services/likes/likes.service';
+import { ICommunityPost } from '@/types';
 
 const CommentsSection = () => {
   const postId = useParams().id;
@@ -19,21 +23,46 @@ const CommentsSection = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const comment = data?.data?.data[0];
-
   return (
     <div className="space-y-4">
       <h2 className="font-semibold">{data?.data?.data?.length} Comments</h2>
       <PostReplyForm postId={postId as string} />
 
       {data?.data?.data?.map((comment) => (
-        <Comment key={comment._id} post={comment} isComment>
-          <div className="flex items-center gap-4 pt-2">
-            <CommentCTAs post={comment} />
-          </div>
-        </Comment>
+        <CommentItem key={comment._id} comment={comment} />
       ))}
     </div>
+  );
+};
+
+interface CommentItemProps {
+  comment: ICommunityPost;
+}
+
+const CommentItem = ({ comment }: CommentItemProps) => {
+  const { mutate: toggleLike, isPending } = useToggleCommentLike(comment._id);
+
+  const { data: likeStatus } = useLikeStatus('comment', comment._id);
+  const handleLikeClick = () => {
+    toggleLike();
+  };
+
+  return (
+    <Post.Root data={comment}>
+      <Post.OwnerAvatar />
+      <Post.Body>
+        <Post.Header />
+        <Post.Content />
+        <Post.Actions>
+          <Post.LikeButton
+            onClick={handleLikeClick}
+            disabled={isPending}
+            isLiked={likeStatus?.data?.data?.isLiked}
+            likeCount={likeStatus?.data?.data?.likeCount}
+          />
+        </Post.Actions>
+      </Post.Body>
+    </Post.Root>
   );
 };
 
