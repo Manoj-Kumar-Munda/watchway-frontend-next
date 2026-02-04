@@ -243,9 +243,50 @@ const useToggleCommentLike = (commentId: string) => {
     },
   });
 };
+
+const useToggleLikeVideo = (videoId: string) => {
+  const queryClient = getQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      api.post<ApiResponse<ICommunityPost>>(
+        endpoints.likes.toggleVideoLike.url.replace('{videoId}', videoId)
+      ),
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey: [...endpoints.likes.likeStatus.queryKeys, 'video', videoId],
+      });
+      const previousData = queryClient.getQueryData([
+        ...endpoints.likes.likeStatus.queryKeys,
+        'video',
+        videoId,
+      ]) as ApiResponse<ILikeStatusResponse>;
+
+      previousData.data.data = {
+        isLiked: !previousData.data.data.isLiked,
+        likeCount: previousData.data.data.isLiked
+          ? previousData.data.data.likeCount - 1
+          : previousData.data.data.likeCount + 1,
+      };
+
+      return { previousData };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        [...endpoints.likes.likeStatus.queryKeys, 'video', videoId],
+        context?.previousData
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [...endpoints.likes.likeStatus.queryKeys, 'video', videoId],
+      });
+    },
+  });
+};
 export {
   useLikeStatus,
   useBatchLikeStatus,
   useToggleLikeCommunityPost,
   useToggleCommentLike,
+  useToggleLikeVideo,
 };

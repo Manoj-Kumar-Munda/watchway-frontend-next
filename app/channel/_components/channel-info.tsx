@@ -1,8 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IChannel } from '@/types/channel.types';
 import { formatViews as formatSubscribers } from '@/utils/helpers';
 import { ChannelInfoSkeleton } from './';
 import SubscribeToggleButton from '@/components/subscribe-toggle-button';
+import ProfileAvatar from '@/components/profile-avatar';
 
 interface ChannelInfoProps {
   channel: IChannel | undefined;
@@ -15,12 +15,11 @@ const ChannelInfo = ({ channel, isPending }: ChannelInfoProps) => {
   }
   return (
     <div className="flex items-start gap-4 py-6">
-      <Avatar className="size-28 ring-4 ring-white shadow-xl">
-        <AvatarImage src={channel.avatar} />
-        <AvatarFallback className="text-4xl font-bold bg-neutral-700  text-white">
-          {channel.fullName?.charAt(0) || channel.username?.charAt(0) || 'C'}
-        </AvatarFallback>
-      </Avatar>
+      <ProfileAvatar
+        src={channel.avatar}
+        alt={channel.fullName || channel.username}
+        className="size-24"
+      />
 
       <div className="flex flex-col gap-0.5 flex-1">
         <h1 className="text-2xl font-bold text-foreground tracking-tight">
