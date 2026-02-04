@@ -170,6 +170,16 @@ const useGetLikedVideos = () => {
     },
   });
 };
+
+const useGetHistory = () => {
+  return useQuery<ApiResponse<IVideoListResponse>>({
+    queryKey: endpoints.users.history.queryKeys,
+    queryFn: () => {
+      return api.get(endpoints.users.history.url);
+    },
+  });
+};
+
 export {
   useVideoList,
   useGetVideo,
@@ -177,4 +187,5 @@ export {
   useVideoCommentMutation,
   useSearchVideo,
   useGetLikedVideos,
+  useGetHistory,
 };
