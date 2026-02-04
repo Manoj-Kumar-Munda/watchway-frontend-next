@@ -1,4 +1,5 @@
 'use client';
+import { AddToPlaylistPopover } from '@/components/add-playlist-popover';
 import ProfileAvatar from '@/components/profile-avatar';
 import SubscribeToggleButton from '@/components/subscribe-toggle-button';
 import ToggleLikeButton from '@/components/toogle-like-button';
@@ -31,6 +32,7 @@ const VideoMeta = ({ videoId }: VideoMetaProps) => {
         <ChannelMeta channelId={channelId} />
 
         <div className="flex gap-4 items-center">
+          <AddToPlaylistPopover />
           <div className="flex items-center gap-1">
             <IconEye size={16} className="text-neutral-600" />
             <span className="text-sm text-neutral-600">
