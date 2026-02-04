@@ -30,7 +30,7 @@ const useVideoList = () => {
 };
 
 const useGetVideo = (videoId: string) => {
-  return useQuery<ApiResponse<{ data: IVideo[] }>>({
+  return useQuery<ApiResponse<{ data: IVideo }>>({
     queryKey: [...endpoints.videos.list.queryKeys, videoId],
     queryFn: () => {
       return api.get(endpoints.videos.get.url.replace('{videoId}', videoId));

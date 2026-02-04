@@ -14,7 +14,7 @@ const VideoPlayer = ({ videoId }: { videoId: string }) => {
   if (isPending) return null;
   if (error) return null;
 
-  const videoPublicId = extractPublicVideoId(data?.data?.data[0].videoFile);
+  const videoPublicId = extractPublicVideoId(data?.data?.data.videoFile);
   const cld = new Cloudinary({
     cloud: {
       cloudName: env.CLOUDINARY_USERNAME,
