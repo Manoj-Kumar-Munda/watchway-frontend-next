@@ -2,9 +2,11 @@
 import Link from 'next/link';
 import {
   IconHome,
-  IconTrendingUp,
+  IconThumbUp,
   IconHistory,
-  IconClock,
+  IconFolder,
+  IconUsers,
+  IconGauge,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -19,19 +21,29 @@ const navItems = [
     href: '/',
   },
   {
-    icon: <IconTrendingUp size={24} strokeWidth={2} />,
-    label: 'Trending',
-    href: '/trending',
+    icon: <IconThumbUp size={24} strokeWidth={2} />,
+    label: 'Liked Videos',
+    href: '/liked-videos',
   },
   {
     icon: <IconHistory size={24} strokeWidth={2} />,
-    label: 'History',
+    label: 'Watch History',
     href: '/history',
   },
   {
-    icon: <IconClock size={24} strokeWidth={2} />,
-    label: 'Watch Later',
-    href: '/watch-later',
+    icon: <IconFolder size={24} strokeWidth={2} />,
+    label: 'Collection',
+    href: '/collection',
+  },
+  {
+    icon: <IconUsers size={24} strokeWidth={2} />,
+    label: 'Subscribers',
+    href: '/subscribers',
+  },
+  {
+    icon: <IconGauge size={24} strokeWidth={2} />,
+    label: 'Dashboard',
+    href: '/dashboard',
   },
 ];
 
