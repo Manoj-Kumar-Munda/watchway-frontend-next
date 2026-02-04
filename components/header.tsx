@@ -15,7 +15,7 @@ import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 import { useUserStore } from '@/store';
 import appStore from '@/store/app-store';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { isNotShowSidebar } from '@/utils/helpers';
 import { ROUTES } from '@/config/routes';
 
@@ -87,10 +87,10 @@ const Header = () => {
 };
 
 const SearchBar = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const handleSearch = () => {
-    //TODO: Implement search functionality
-    console.log(searchQuery);
+    router.push(`/search?q=${searchQuery}`);
   };
   return (
     <div className="flex items-center w-full justify-center">
@@ -101,9 +101,17 @@ const SearchBar = () => {
           className="rounded-full pr-4 max-w-md w-full focus:outline-none border-none shadow-none focus-visible:ring-0"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
         />
         <Separator orientation="vertical" />
-        <Button className="bg-transparent px-4 hover:bg-transparent cursor-pointer">
+        <Button
+          className="bg-transparent px-4 hover:bg-transparent cursor-pointer"
+          onClick={handleSearch}
+        >
           <IconSearch
             size={20}
             className="text-neutral-600 hover:text-neutral-900"
