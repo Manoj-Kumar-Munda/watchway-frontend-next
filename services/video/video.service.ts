@@ -180,6 +180,16 @@ const useGetHistory = () => {
   });
 };
 
+const useUpdateWatchHistory = (videoId: string) => {
+  return useQuery<ApiResponse<{ data: null }>>({
+    queryKey: [...endpoints.users.updateWatchHistory.queryKeys, videoId],
+    queryFn: () => {
+      return api.post(endpoints.users.updateWatchHistory.url, { videoId });
+    },
+    enabled: !!videoId,
+  });
+};
+
 export {
   useVideoList,
   useGetVideo,
@@ -188,4 +198,5 @@ export {
   useSearchVideo,
   useGetLikedVideos,
   useGetHistory,
+  useUpdateWatchHistory,
 };

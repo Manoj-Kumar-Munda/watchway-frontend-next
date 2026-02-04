@@ -1,7 +1,10 @@
 'use client';
 
 import env from '@/config/env';
-import { useGetVideo } from '@/services/video/video.service';
+import {
+  useGetVideo,
+  useUpdateWatchHistory,
+} from '@/services/video/video.service';
 import { extractPublicVideoId } from '@/utils/helpers';
 import { AdvancedVideo, lazyload } from '@cloudinary/react';
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -10,6 +13,7 @@ import { byRadius } from '@cloudinary/url-gen/actions/roundCorners';
 
 const VideoPlayer = ({ videoId }: { videoId: string }) => {
   const { data, isPending, error } = useGetVideo(videoId);
+  useUpdateWatchHistory(videoId);
 
   if (isPending) return null;
   if (error) return null;
