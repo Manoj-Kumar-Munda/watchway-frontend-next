@@ -169,4 +169,9 @@ export const endpoints = {
       queryKeys: ['like'],
     },
   },
+  search: {
+    // sortOrder - 1 or -1, sortBy - createdAt, views, duration
+    url: `${API_VERSION}/videos/search`,
+    queryKeys: ['search'],
+  },
 };

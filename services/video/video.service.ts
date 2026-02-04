@@ -128,9 +128,44 @@ const useVideoCommentMutation = (videoId: string) => {
   });
 };
 
+type SortOrder = 1 | -1;
+type SortBy = 'createdAt' | 'views' | 'duration';
+
+interface ISearchVideoResponse {
+  data: {
+    docs: IVideo[];
+    totalDocs: number;
+    limit: number;
+    totalPages: number;
+    page: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+    nextPage: number | null;
+    prevPage: number | null;
+  };
+}
+
+interface ISearchVideoParams {
+  query: string;
+  page: number;
+  limit: number;
+  sortBy: SortBy;
+  sortOrder: SortOrder;
+}
+
+const useSearchVideo = (params: ISearchVideoParams) => {
+  return useQuery<ApiResponse<ISearchVideoResponse>>({
+    queryKey: [...endpoints.search.queryKeys, params],
+    queryFn: () => {
+      return api.get(endpoints.search.url, { params });
+    },
+  });
+};
+
 export {
   useVideoList,
   useGetVideo,
   useGetVideoComments,
   useVideoCommentMutation,
+  useSearchVideo,
 };
