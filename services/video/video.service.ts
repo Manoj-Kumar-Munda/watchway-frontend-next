@@ -162,10 +162,19 @@ const useSearchVideo = (params: ISearchVideoParams) => {
   });
 };
 
+const useGetLikedVideos = () => {
+  return useQuery<ApiResponse<IVideoListResponse>>({
+    queryKey: endpoints.likes.likedVideos.queryKeys,
+    queryFn: () => {
+      return api.get(endpoints.likes.likedVideos.url);
+    },
+  });
+};
 export {
   useVideoList,
   useGetVideo,
   useGetVideoComments,
   useVideoCommentMutation,
   useSearchVideo,
+  useGetLikedVideos,
 };

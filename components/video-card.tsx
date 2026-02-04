@@ -54,7 +54,7 @@ const Card = ({
   return (
     <VideoCardContext value={{ orientation, size, videoId }}>
       {videoId ? (
-        <Link href={`/watch/${videoId}`} className="block">
+        <Link href={`/watch/${videoId}`} className="w-fit">
           {cardContent}
         </Link>
       ) : (

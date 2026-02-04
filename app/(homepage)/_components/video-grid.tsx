@@ -1,15 +1,21 @@
 'use client';
-import { useVideoList } from '@/services/video/video.service';
 import VerticalVideoCard from './vertical-video-card';
 import VideoSkeleton from './video-skeleton';
+import { IVideo } from '@/types';
 
-const VideoGrid = () => {
-  const { data, isPending, isError } = useVideoList();
-
+const VideoGrid = ({
+  videos,
+  isPending,
+  isError,
+}: {
+  videos: IVideo[];
+  isPending: boolean;
+  isError: boolean;
+}) => {
   if (isError) {
-    //TODO: handle error
     return <div>Error fetching videos</div>;
   }
+
   return (
     <div className="w-full flex">
       <div
@@ -18,8 +24,10 @@ const VideoGrid = () => {
       >
         {isPending ? (
           <VideoSkeleton count={5} />
+        ) : videos.length === 0 ? (
+          <div>No videos found</div>
         ) : (
-          data?.data?.data?.docs.map((video) => (
+          videos.map((video) => (
             <VerticalVideoCard key={video._id} video={video} />
           ))
         )}

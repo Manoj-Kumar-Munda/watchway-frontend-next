@@ -1,9 +1,16 @@
+'use client';
 import VideoGrid from './_components/video-grid';
+import { useVideoList } from '@/services/video/video.service';
 
-export default async function Page() {
+export default function Page() {
+  const { data, isPending, isError } = useVideoList();
   return (
     <>
-      <VideoGrid />
+      <VideoGrid
+        videos={data?.data?.data?.docs || []}
+        isPending={isPending}
+        isError={isError}
+      />
     </>
   );
 }
