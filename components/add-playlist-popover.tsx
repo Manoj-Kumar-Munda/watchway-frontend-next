@@ -78,11 +78,7 @@ interface NewPlaylistDialogProps {
   onCreate: (title: string) => void;
 }
 
-function NewPlaylistDialog({
-  open,
-  onOpenChange,
-  onCreate,
-}: NewPlaylistDialogProps) {
+function NewPlaylistDialog({ open, onOpenChange }: NewPlaylistDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const { mutate: createPlaylist } = useCreatePlaylist();
@@ -97,6 +93,8 @@ function NewPlaylistDialog({
         {
           onSuccess: () => {
             toast.success('Playlist created successfully');
+            setTitle('');
+            setDescription('');
             onOpenChange(false);
           },
           onError: (error) => {
@@ -104,13 +102,12 @@ function NewPlaylistDialog({
           },
         }
       );
-      setTitle('');
-      setDescription('');
     }
   };
 
   const handleCancel = () => {
     setTitle('');
+    setDescription('');
     onOpenChange(false);
   };
 
