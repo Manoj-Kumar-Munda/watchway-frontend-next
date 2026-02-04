@@ -31,13 +31,22 @@ const Card = ({
     <div
       {...props}
       className={cn(
-        'flex flex-col w-full rounded-md overflow-hidden transition-all duration-300 ease-in-out relative  hover:bg-gray-100/70 max-w-sm',
+        'group flex flex-col w-full rounded-lg transition-all duration-300 ease-in-out relative max-w-sm z-10',
         {
           'flex-row max-w-auto gap-4': orientation === 'horizontal',
-          'flex-col  hover:scale-105': orientation === 'vertical',
+          'flex-col hover:scale-105': orientation === 'vertical',
         }
       )}
     >
+      <div
+        className={cn(
+          'absolute inset-0 w-full h-full rounded-lg bg-gray-100/0 scale-100 group-hover:scale-110 group-hover:bg-gray-100 -z-10 transition-all duration-300 ease-in-out',
+          {
+            'scale-100 group-hover:scale-x-[1.02] ':
+              orientation === 'horizontal',
+          }
+        )}
+      />
       {children}
     </div>
   );
@@ -65,7 +74,7 @@ const Thumbnail = ({
   const { orientation } = React.useContext(VideoCardContext);
   return (
     <div
-      className={cn('aspect-video w-full rounded overflow-hidden max-w-sm', {
+      className={cn('aspect-video w-full rounded-lg overflow-hidden max-w-sm', {
         'w-80': orientation === 'horizontal',
       })}
     >
