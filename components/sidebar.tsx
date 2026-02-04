@@ -37,8 +37,8 @@ const navItems = [
   },
   {
     icon: <IconUsers size={24} strokeWidth={2} />,
-    label: 'Subscribers',
-    href: '/subscribers',
+    label: 'Subscriptions',
+    href: '/subscriptions',
   },
   {
     icon: <IconGauge size={24} strokeWidth={2} />,

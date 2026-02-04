@@ -1,5 +1,6 @@
 'use client';
 
+import ProfileAvatar from '@/components/profile-avatar';
 import SubscribeToggleButton from '@/components/subscribe-toggle-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,8 +25,8 @@ const ChannelSubscriptions = () => {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto ring-0">
-      <CardContent className="space-y-4">
+    <Card className="max-w-2xl mx-auto ring-0 shaow-none">
+      <CardContent className="space-y-4 ring-0 shadow-none">
         {subscriptions?.data?.data?.length === 0 && (
           <div className="text-center text-muted-foreground">
             No subscriptions
@@ -37,12 +38,11 @@ const ChannelSubscriptions = () => {
             className="flex items-center justify-between"
           >
             <div className="flex items-center gap-4">
-              <Avatar className="size-24">
-                <AvatarImage src={subscription.channelInfo.avatar} />
-                <AvatarFallback>
-                  {subscription.channelInfo.fullName?.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
+              <ProfileAvatar
+                src={subscription.channelInfo.avatar}
+                alt={subscription.channelInfo.fullName}
+                size="lg"
+              />
               <div className="flex flex-col">
                 <h3 className="text-base font-semibold">
                   {subscription.channelInfo.fullName}
