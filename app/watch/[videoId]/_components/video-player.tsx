@@ -23,13 +23,13 @@ const VideoPlayer = ({ videoId }: { videoId: string }) => {
   const myVideo = cld.video(videoPublicId);
   myVideo.resize(fill()).roundCorners(byRadius(20));
   return (
-    <div className="mx-auto aspect-video max-h-[400px] 3xl:max-h-[600px] overflow-hidden rounded-xl bg-black">
+    <div className="mx-auto aspect-video h-full overflow-hidden rounded-xl bg-black">
       <AdvancedVideo
         cldVid={myVideo}
         controls
         autoPlay
         plugins={[lazyload()]}
-        className=" h-full object-contain"
+        className=" h-full object-cover"
       />
     </div>
   );
