@@ -6,11 +6,12 @@ import {
   IconSearch,
   IconBrandBilibili,
   IconMenu2,
+  IconLogout,
 } from '@tabler/icons-react';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 import { useUserStore } from '@/store';
@@ -18,6 +19,9 @@ import appStore from '@/store/app-store';
 import { usePathname, useRouter } from 'next/navigation';
 import { isNotShowSidebar } from '@/utils/helpers';
 import { ROUTES } from '@/config/routes';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { useLogout } from '@/services/auth/auth.service';
+import { toast } from 'sonner';
 
 const Header = () => {
   const { toggleSidebar } = appStore();
@@ -61,10 +65,7 @@ const Header = () => {
           </Button>
           {/* User Avatar */}
           {user ? (
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <UserAvatarPopover user={user} />
           ) : (
             <>
               <Link href="/login">
@@ -83,6 +84,70 @@ const Header = () => {
         </nav>
       </div>
     </header>
+  );
+};
+
+interface UserAvatarPopoverProps {
+  user: { name?: string; email?: string; avatar?: string } | null;
+}
+
+const UserAvatarPopover = ({ user }: UserAvatarPopoverProps) => {
+  const { mutate: logoutMutation } = useLogout();
+  const logout = useUserStore((state) => state.logout);
+
+  const handleLogout = async () => {
+    logoutMutation(undefined, {
+      onSuccess: () => {
+        toast.success('Logged out successfully');
+        logout();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+  };
+
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <Avatar className="cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all">
+          <AvatarImage src={user?.avatar || 'https://github.com/shadcn.png'} />
+          <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
+        </Avatar>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        sideOffset={8}
+        className="w-48 p-2 backdrop-blur-xl bg-white/70 border-white/20 shadow-xl"
+      >
+        <div className="flex flex-col gap-1">
+          <PopoverItem
+            icon={<IconLogout size={18} />}
+            label="Sign Out"
+            onClick={handleLogout}
+          />
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
+interface PopoverItemProps {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+}
+
+const PopoverItem = ({ icon, label, onClick }: PopoverItemProps) => {
+  return (
+    <Button
+      variant="ghost"
+      className={`w-full justify-start gap-2  `}
+      onClick={onClick}
+    >
+      {icon}
+      {label}
+    </Button>
   );
 };
 

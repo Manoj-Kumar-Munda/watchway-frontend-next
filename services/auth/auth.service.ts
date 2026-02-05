@@ -38,3 +38,16 @@ export const useCurrentUser = () => {
     retry: false,
   });
 };
+
+export const useLogout = () => {
+  return useMutation({
+    mutationFn: () => {
+      return api.post<ApiResponse<void>>(endpoints.auth.logout.url);
+    },
+    onSuccess: () => {
+      getQueryClient().invalidateQueries({
+        queryKey: endpoints.users.currentUser.queryKeys,
+      });
+    },
+  });
+};
