@@ -35,6 +35,7 @@ const useGetVideo = (videoId: string) => {
     queryFn: () => {
       return api.get(endpoints.videos.get.url.replace('{videoId}', videoId));
     },
+    enabled: !!videoId,
   });
 };
 

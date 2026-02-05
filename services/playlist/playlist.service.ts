@@ -3,6 +3,7 @@ import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import { getQueryClient } from '@/lib/query-client';
 import { ApiResponse } from '../types';
+import { IVideo } from '@/types';
 
 interface CreatePlaylistBody {
   name: string;
@@ -23,6 +24,15 @@ interface IPlaylist {
   totalVideos: number;
   coverImage: string;
   updatedAt: string;
+}
+
+export interface IPLaylistById {
+  coverImage: string;
+  name: string;
+  owner: string;
+  description: string;
+  updatedAt: string;
+  videos: IVideo[];
 }
 
 interface IPlaylistsByChannelIdResponse {
@@ -63,8 +73,12 @@ const useUpdatePlaylistMeta = (playlistId: string) => {
 
 const useDeletePlaylist = () => {};
 
+interface IPlaylistByIdResponse {
+  data: IPLaylistById;
+}
+
 const useGetPlaylistById = (playlistId: string) => {
-  return useQuery({
+  return useQuery<ApiResponse<IPlaylistByIdResponse>>({
     queryKey: endpoints.playlists.playlistById.queryKeys,
     queryFn: () => {
       return api.get(
