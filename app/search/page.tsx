@@ -39,8 +39,12 @@ const Page = () => {
 
 const HorizontalVideoCard = ({ video }: { video: IVideo }) => {
   return (
-    <VideoCardRoot.Card orientation="horizontal" className="flex gap-4 w-full ">
-      <VideoCardRoot.Thumbnail src={video.thumbnail} size="lg" />
+    <VideoCardRoot.Card
+      orientation="horizontal"
+      className="flex gap-4 w-full"
+      videoId={video._id}
+    >
+      <VideoCardRoot.Thumbnail src={video.thumbnail} size="default" />
 
       <div className="flex flex-col gap-2">
         <VideoCardRoot.VideoTitle title={video.title} />
