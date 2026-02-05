@@ -6,7 +6,7 @@ import {
   IconHistory,
   IconFolder,
   IconUsers,
-  IconGauge,
+  IconX,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -47,12 +47,6 @@ const navItems = [
     href: '/subscriptions',
     requiresAuth: true,
   },
-  // {
-  //   icon: <IconGauge size={24} strokeWidth={2} />,
-  //   label: 'Dashboard',
-  //   href: '/dashboard',
-  //   requiresAuth: true,
-  // },
 ];
 
 const Sidebar = () => {
@@ -81,37 +75,57 @@ const Sidebar = () => {
   }
 
   return (
-    <aside
-      className={cn(
-        'sticky top-20 h-[calc(100vh-80px)] w-60 shrink-0 transition-all duration-300 ease-in-out border-r overflow-y-auto',
-        sidebarOpen ? 'w-60' : 'w-0'
-      )}
-    >
-      <nav className="mt-4 px-4">
-        <ul className="flex flex-col gap-2">
-          {navItems.map((item) => (
-            <NavItem key={item.href} {...item} />
-          ))}
-        </ul>
-      </nav>
-    </aside>
+    <>
+      <div
+        className={cn(
+          'fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300',
+          sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        )}
+        onClick={() => setSidebarOpen(false)}
+      />
+      <aside
+        className={cn(
+          'shrink-0 transition-all duration-300 ease-in-out border-r overflow-y-auto',
+          'md:sticky md:top-20 md:h-[calc(100vh-80px)] md:w-60',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-white h-full',
+          sidebarOpen
+            ? 'translate-x-0'
+            : '-translate-x-full md:translate-x-0 md:w-0'
+        )}
+      >
+        <div className="flex justify-end p-4 md:hidden">
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+            aria-label="Close sidebar"
+          >
+            <IconX size={24} strokeWidth={2} />
+          </button>
+        </div>
+        <nav className="px-4 md:mt-4">
+          <ul className="flex flex-col gap-2">
+            {navItems.map((item) => (
+              <NavItem key={item.href} {...item} />
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    </>
   );
 };
 
-const NavItem = ({
-  icon,
-  label,
-  href,
-  requiresAuth = false,
-}: {
+interface NavItemProps {
   icon: React.ReactNode;
   label: string;
   href: string;
   requiresAuth?: boolean;
-}) => {
+}
+
+const NavItem = ({ icon, label, href, requiresAuth = false }: NavItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const { requireAuth, isAuthenticated } = useRequireAuth();
+  const { setSidebarOpen } = appStore();
   const isActive = pathname === href;
 
   const handleClick = (e: React.MouseEvent) => {
@@ -120,6 +134,10 @@ const NavItem = ({
       requireAuth(() => {
         router.push(href);
       });
+      return;
+    }
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
     }
   };
 
