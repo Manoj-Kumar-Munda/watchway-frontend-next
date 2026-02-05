@@ -17,10 +17,10 @@ const VideoGrid = ({
   }
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex justify-center">
       <div
-        className="grid gap-4 w-full min-w-0"
-        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, auto))' }}
+        className="grid gap-4 w-full min-w-0 justify-center sm:justify-start"
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, auto))' }}
       >
         {isPending ? (
           <VideoSkeleton count={5} />
