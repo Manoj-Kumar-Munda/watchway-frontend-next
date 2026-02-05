@@ -5,6 +5,7 @@ import Header from '@/components/header';
 import Sidebar from '@/components/sidebar';
 import Providers from '@/components/providers';
 import { Toaster } from '@/components/ui/sonner';
+import UploadStatusIndicator from '@/components/upload-status-indicator';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,6 +38,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <UploadStatusIndicator />
           <Toaster />
         </Providers>
       </body>

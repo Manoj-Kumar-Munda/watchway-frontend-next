@@ -74,6 +74,14 @@ export const endpoints = {
       url: `${API_VERSION}/comments/{videoId}`,
       queryKeys: ['videos', 'comments'],
     },
+    upload: {
+      url: `${API_VERSION}/videos`,
+      queryKeys: ['videos'],
+    },
+    uploadStatus: {
+      url: `${API_VERSION}/videos/upload-status/{videoId}`,
+      queryKeys: ['videos'],
+    },
   },
   subscriptions: {
     list: {
