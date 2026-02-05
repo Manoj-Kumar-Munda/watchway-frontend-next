@@ -141,25 +141,14 @@ const Header = () => {
                 {user ? (
                   <UserAvatarPopover user={user} />
                 ) : (
-                  <>
-                    <Link href="/login">
-                      <Button
-                        variant="outline"
-                        className="rounded-full px-4 text-sm"
-                      >
-                        Login
-                      </Button>
-                    </Link>
-
-                    <Link href="/register">
-                      <Button
-                        variant={'outline'}
-                        className={'rounded-full px-4'}
-                      >
-                        Register
-                      </Button>
-                    </Link>
-                  </>
+                  <Link href="/login">
+                    <Button
+                      variant="outline"
+                      className="rounded-full px-4 text-sm"
+                    >
+                      Login
+                    </Button>
+                  </Link>
                 )}
               </nav>
             </motion.div>
