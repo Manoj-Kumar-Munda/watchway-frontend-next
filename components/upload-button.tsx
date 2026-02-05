@@ -87,10 +87,10 @@ const UploadButton = () => {
     <>
       <Button
         onClick={() => setOpen(true)}
-        className={'rounded-full px-4 text-sm'}
+        className={'rounded-full sm:px-4 text-sm'}
       >
-        <IconVideoPlus size={24} strokeWidth={3} />
-        Upload
+        <IconVideoPlus strokeWidth={3} className="sm:mr-2" />
+        <span className="hidden sm:block">Upload</span>
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-lg">

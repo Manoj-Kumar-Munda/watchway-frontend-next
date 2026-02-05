@@ -23,63 +23,148 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { useLogout } from '@/services/auth/auth.service';
 import { toast } from 'sonner';
 import UploadButton from './upload-button';
+import { cn } from '@/lib/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 
 const Header = () => {
   const { toggleSidebar } = appStore();
   const user = useUserStore((state) => state.user);
   const pathName = usePathname();
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const showSidebarToggle = !isNotShowSidebar(pathName);
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b bg-white h-20">
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-4">
-          {showSidebarToggle && (
-            <Button
-              variant={'ghost'}
-              size={'icon'}
-              className="rounded-full"
-              onClick={toggleSidebar}
+      <div className="flex items-center justify-between p-4 h-full relative overflow-hidden">
+        <AnimatePresence mode="popLayout">
+          {!isMobileSearchOpen && (
+            <motion.div
+              className="flex items-center gap-2 sm:gap-4 z-10"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
             >
-              <IconMenu2 size={24} strokeWidth={3} />
-            </Button>
-          )}
-          <Link href={ROUTES.HOME.path} className="flex items-center gap-1.5">
-            <IconBrandBilibili size={24} />
+              {showSidebarToggle && (
+                <Button
+                  variant={'ghost'}
+                  size={'icon'}
+                  className="rounded-full"
+                  onClick={toggleSidebar}
+                >
+                  <IconMenu2 size={24} strokeWidth={3} />
+                </Button>
+              )}
+              <Link
+                href={ROUTES.HOME.path}
+                className="flex items-center gap-1.5"
+              >
+                <IconBrandBilibili size={24} />
 
-            <h1 className="text-2xl font-bold font-oswald text-neutral-800">
-              Watchway
-            </h1>
-          </Link>
-        </div>
+                <h1 className="text-2xl font-bold font-oswald text-neutral-800">
+                  Watchway
+                </h1>
+              </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Mobile Search Back Button */}
+        <AnimatePresence>
+          {isMobileSearchOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="mr-2 sm:hidden z-20"
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onClick={() => setIsMobileSearchOpen(false)}
+              >
+                <ArrowLeft size={24} />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Search Bar */}
-        <SearchBar />
-        {/* Navigation Items */}
-        <nav className="flex items-center gap-4">
-          <UploadButton />
-          <Button variant={'ghost'} size={'icon-lg'} className={'rounded-full'}>
-            <IconBell size={24} strokeWidth={2} />
-          </Button>
-          {/* User Avatar */}
-          {user ? (
-            <UserAvatarPopover user={user} />
-          ) : (
-            <>
-              <Link href="/login">
-                <Button variant="outline" className="rounded-full px-4 text-sm">
-                  Login
-                </Button>
-              </Link>
-
-              <Link href="/register">
-                <Button variant={'outline'} className={'rounded-full px-4'}>
-                  Register
-                </Button>
-              </Link>
-            </>
+        <motion.div
+          className={cn(
+            'flex items-center justify-center transition-all duration-300',
+            isMobileSearchOpen
+              ? 'absolute inset-0 z-10 px-12 bg-white w-full'
+              : 'hidden sm:flex flex-1 mx-4'
           )}
-        </nav>
+          layout
+        >
+          <SearchBar fluid={isMobileSearchOpen} />
+        </motion.div>
+
+        {/* Mobile Search Trigger */}
+        <AnimatePresence>
+          {!isMobileSearchOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="sm:hidden ml-auto mr-2"
+            >
+              <Button
+                variant={'ghost'}
+                size={'icon'}
+                className="rounded-full"
+                onClick={() => setIsMobileSearchOpen(true)}
+              >
+                <IconSearch size={24} strokeWidth={3} />
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Navigation Items */}
+        <AnimatePresence>
+          {!isMobileSearchOpen && (
+            <motion.div
+              className="flex items-center gap-4 z-10"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.2 }}
+            >
+              <nav className="flex items-center gap-4">
+                <UploadButton />
+                {/* User Avatar */}
+                {user ? (
+                  <UserAvatarPopover user={user} />
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <Button
+                        variant="outline"
+                        className="rounded-full px-4 text-sm"
+                      >
+                        Login
+                      </Button>
+                    </Link>
+
+                    <Link href="/register">
+                      <Button
+                        variant={'outline'}
+                        className={'rounded-full px-4'}
+                      >
+                        Register
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
@@ -149,19 +234,24 @@ const PopoverItem = ({ icon, label, onClick }: PopoverItemProps) => {
   );
 };
 
-const SearchBar = () => {
+const SearchBar = ({ fluid = false }: { fluid?: boolean }) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const handleSearch = () => {
     router.push(`/search?q=${searchQuery}`);
   };
   return (
-    <div className="flex items-center w-full justify-center">
-      <div className="border border-gray-300 rounded-full pl-4 max-w-md w-full flex items-center group transition-all focus-within:ring-1 focus-within:ring-ring focus-within:border-ring overflow-hidden ">
+    <div
+      className={cn(
+        'items-center justify-center w-full px-4 flex',
+        fluid ? 'w-full px-0' : 'max-w-md'
+      )}
+    >
+      <div className="border border-gray-300 rounded-full pl-4 w-full flex items-center group transition-all focus-within:ring-1 focus-within:ring-ring focus-within:border-ring overflow-hidden bg-white">
         <Input
           type="text"
           placeholder="Search"
-          className="rounded-full pr-4 max-w-md w-full focus:outline-none border-none shadow-none focus-visible:ring-0"
+          className="rounded-full pr-4 w-full focus:outline-none border-none shadow-none focus-visible:ring-0"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => {

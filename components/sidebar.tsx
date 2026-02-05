@@ -47,12 +47,12 @@ const navItems = [
     href: '/subscriptions',
     requiresAuth: true,
   },
-  {
-    icon: <IconGauge size={24} strokeWidth={2} />,
-    label: 'Dashboard',
-    href: '/dashboard',
-    requiresAuth: true,
-  },
+  // {
+  //   icon: <IconGauge size={24} strokeWidth={2} />,
+  //   label: 'Dashboard',
+  //   href: '/dashboard',
+  //   requiresAuth: true,
+  // },
 ];
 
 const Sidebar = () => {
