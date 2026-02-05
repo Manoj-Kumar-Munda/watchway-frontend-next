@@ -7,11 +7,13 @@ import {
   useLikeStatus,
   useToggleCommentLike,
 } from '@/services/likes/likes.service';
+import { useUserStore } from '@/store';
 
 const CommentLikeButton = ({ post }: { post: IComment }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { data } = useLikeStatus('comment', post._id);
+  const { user } = useUserStore();
+  const { data } = useLikeStatus('comment', post._id, !user);
 
   const { mutateAsync: toggleLike } = useToggleCommentLike(post._id);
 

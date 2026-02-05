@@ -10,6 +10,7 @@ import {
   useLikeStatus,
 } from '@/services/likes/likes.service';
 import { useToggleLikeCommunityPost } from '@/services/likes/likes.service';
+import { useUserStore } from '@/store';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
@@ -52,8 +53,9 @@ const CommunityPostItem = ({ post }: CommunityPostItemProps) => {
   const { mutate: toggleLike, isPending } = useToggleLikeCommunityPost(
     post._id
   );
+  const { user } = useUserStore();
 
-  const { data: likeStatus } = useLikeStatus('tweet', post._id);
+  const { data: likeStatus } = useLikeStatus('tweet', post._id, !user);
 
   const handleLikeClick = () => {
     toggleLike();

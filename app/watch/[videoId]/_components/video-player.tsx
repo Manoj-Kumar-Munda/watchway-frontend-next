@@ -10,10 +10,12 @@ import { AdvancedVideo, lazyload } from '@cloudinary/react';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { fill } from '@cloudinary/url-gen/actions/resize';
 import { byRadius } from '@cloudinary/url-gen/actions/roundCorners';
+import { useUserStore } from '@/store';
 
 const VideoPlayer = ({ videoId }: { videoId: string }) => {
+  const { user } = useUserStore();
   const { data, isPending, error } = useGetVideo(videoId);
-  useUpdateWatchHistory(videoId);
+  useUpdateWatchHistory(videoId, !!user);
 
   if (isPending) return null;
   if (error) return null;

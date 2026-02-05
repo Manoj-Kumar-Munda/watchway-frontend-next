@@ -9,6 +9,7 @@ import {
   useToggleLikeVideo,
 } from '@/services/likes/likes.service';
 import { useGetVideo } from '@/services/video/video.service';
+import { useUserStore } from '@/store';
 import { formatViews } from '@/utils/helpers';
 import { IconEye } from '@tabler/icons-react';
 
@@ -52,7 +53,8 @@ const VideoMeta = ({ videoId }: VideoMetaProps) => {
 };
 
 const VideoLikeButton = ({ videoId }: { videoId: string }) => {
-  const { data, isPending, error } = useLikeStatus('video', videoId);
+  const { user } = useUserStore();
+  const { data, isPending, error } = useLikeStatus('video', videoId, !user);
   const { mutate: toggleLikeVideo } = useToggleLikeVideo(videoId);
 
   if (isPending) return null;

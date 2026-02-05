@@ -5,13 +5,15 @@ import {
   useToggleLikeCommunityPost,
 } from '@/services/likes/likes.service';
 import { Card } from '@/components/ui/card';
+import { useUserStore } from '@/store';
 
 interface PostCardProps {
   post: ICommunityPost;
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { data: likeStatus } = useLikeStatus('tweet', post._id);
+  const { user } = useUserStore();
+  const { data: likeStatus } = useLikeStatus('tweet', post._id, !user);
 
   const { mutate: toggleLike, isPending } = useToggleLikeCommunityPost(
     post._id

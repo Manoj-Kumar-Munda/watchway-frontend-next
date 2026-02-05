@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 let isRefreshing = false;
-let isRedirecting = false;
+const isRedirecting = false;
 let failedQueue: Array<{
   resolve: (value?: unknown) => void;
   reject: (reason?: unknown) => void;
@@ -107,20 +107,9 @@ api.interceptors.response.use(
 );
 
 const handleAuthError = () => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  // Skip if already redirecting or already on login page
-  const currentPath = window.location.pathname;
-  console.log(PUBLIC_ROUTES.includes(currentPath));
-
-  if (isRedirecting || PUBLIC_ROUTES.includes(currentPath)) {
-    return;
-  }
-
-  isRedirecting = true;
-  window.location.href = '/login';
+  // No longer redirecting to login page on 401 errors
+  // Let the error propagate to be handled by individual components
+  return;
 };
 
 export default api;

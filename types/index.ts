@@ -18,7 +18,6 @@ export interface ICommunityPost {
   _id: string;
   content: string;
   owner: Pick<IUser, '_id' | 'username' | 'avatar'>;
-  isLiked: boolean;
   likeCount: number;
   comments: number;
   createdAt: string;
