@@ -126,21 +126,18 @@ interface PostLikeButtonProps {
 
 /**
  * Post.LikeButton - Interactive like button with count.
- * Uses context data by default for isLiked and likeCount, but can be overridden.
+ * Requires explicit isLiked and likeCount props.
  */
 const PostLikeButton = ({
   onClick,
-  isLiked,
-  likeCount,
+  isLiked = false,
+  likeCount = 0,
   disabled = false,
 }: PostLikeButtonProps) => {
-  const { data } = usePostContext();
-  const liked = isLiked ?? data.isLiked;
-  const count = likeCount ?? data.likeCount;
   return (
     <ToggleLikeButton
-      isLiked={liked}
-      likeCount={count}
+      isLiked={isLiked}
+      likeCount={likeCount}
       onClick={onClick}
       disabled={disabled}
     />

@@ -1,3 +1,4 @@
+import { useRequireAuth } from '@/lib/use-require-auth';
 import { Post } from './post';
 import {
   useBatchLikeStatus,
@@ -68,8 +69,9 @@ interface CommentItemProps {
 const CommentItem = ({ comment, isLiked, likeCount }: CommentItemProps) => {
   'use client';
   const { mutate: toggleLike, isPending } = useToggleCommentLike(comment._id);
+  const { requireAuth } = useRequireAuth();
   const handleLikeClick = () => {
-    toggleLike();
+    requireAuth(() => toggleLike());
   };
 
   return (

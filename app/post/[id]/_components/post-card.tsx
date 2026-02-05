@@ -1,3 +1,5 @@
+'use client';
+
 import { Post } from '@/components/post';
 import { ICommunityPost } from '@/types';
 import {
@@ -6,6 +8,7 @@ import {
 } from '@/services/likes/likes.service';
 import { Card } from '@/components/ui/card';
 import { useUserStore } from '@/store';
+import { useRequireAuth } from '@/lib/use-require-auth';
 
 interface PostCardProps {
   post: ICommunityPost;
@@ -13,6 +16,7 @@ interface PostCardProps {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserStore();
+  const { requireAuth } = useRequireAuth();
   const { data: likeStatus } = useLikeStatus('tweet', post._id, !user);
 
   const { mutate: toggleLike, isPending } = useToggleLikeCommunityPost(
@@ -20,7 +24,7 @@ const PostCard = ({ post }: PostCardProps) => {
   );
 
   const handleLikeClick = () => {
-    toggleLike();
+    requireAuth(() => toggleLike());
   };
 
   return (

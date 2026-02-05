@@ -12,6 +12,7 @@ import { useGetVideo } from '@/services/video/video.service';
 import { useUserStore } from '@/store';
 import { formatViews } from '@/utils/helpers';
 import { IconEye } from '@tabler/icons-react';
+import { useRequireAuth } from '@/lib/use-require-auth';
 
 interface VideoMetaProps {
   videoId: string;
@@ -54,15 +55,14 @@ const VideoMeta = ({ videoId }: VideoMetaProps) => {
 
 const VideoLikeButton = ({ videoId }: { videoId: string }) => {
   const { user } = useUserStore();
-  const { data, isPending, error } = useLikeStatus('video', videoId, !user);
+  const { requireAuth } = useRequireAuth();
+  const { data } = useLikeStatus('video', videoId, !user);
   const { mutate: toggleLikeVideo } = useToggleLikeVideo(videoId);
 
-  if (isPending) return null;
-  if (error) return null;
   const video = data?.data?.data;
 
   const handleToggleLikeVideo = () => {
-    toggleLikeVideo();
+    requireAuth(() => toggleLikeVideo());
   };
   return (
     <ToggleLikeButton

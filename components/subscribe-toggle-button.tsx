@@ -9,6 +9,7 @@ import {
 import { useUserStore } from '@/store';
 import { toast } from 'sonner';
 import { IconCheck, IconUserPlus } from '@tabler/icons-react';
+import { useRequireAuth } from '@/lib/use-require-auth';
 
 const SubscribeToggleButton = ({
   channelId,
@@ -18,6 +19,7 @@ const SubscribeToggleButton = ({
   isSubscribedDefault?: boolean;
 }) => {
   const user = useUserStore((state) => state.user);
+  const { requireAuth } = useRequireAuth();
   const { mutateAsync: toggleSubscription, isPending: isToggling } =
     useToggleSubscription();
   const { data, isPending } = useSubscriptions(user?._id);
@@ -26,15 +28,19 @@ const SubscribeToggleButton = ({
     data?.data?.data?.some((sub) => sub.channelInfo._id === channelId);
 
   const handleSubscribe = () => {
-    toggleSubscription(channelId, {
-      onSuccess: () => {
-        toast.success(
-          `${isSubscribed ? 'Unsubscribed' : 'Subscribed'} successfully`
-        );
-      },
-      onError: () => {
-        toast.error(`${isSubscribed ? 'Unsubscribing' : 'Subscribing'} failed`);
-      },
+    requireAuth(() => {
+      toggleSubscription(channelId, {
+        onSuccess: () => {
+          toast.success(
+            `${isSubscribed ? 'Unsubscribed' : 'Subscribed'} successfully`
+          );
+        },
+        onError: () => {
+          toast.error(
+            `${isSubscribed ? 'Unsubscribing' : 'Subscribing'} failed`
+          );
+        },
+      });
     });
   };
   return (

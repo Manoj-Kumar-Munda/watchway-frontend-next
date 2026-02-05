@@ -13,37 +13,45 @@ import { cn } from '@/lib/utils';
 import appStore from '@/store/app-store';
 import { isNotShowSidebar } from '@/utils/helpers';
 import { useEffect } from 'react';
+import { useRequireAuth } from '@/lib/use-require-auth';
+import { useRouter } from 'next/navigation';
 
 const navItems = [
   {
     icon: <IconHome size={24} strokeWidth={2} />,
     label: 'Home',
     href: '/',
+    requiresAuth: false,
   },
   {
     icon: <IconThumbUp size={24} strokeWidth={2} />,
     label: 'Liked Videos',
     href: '/liked-videos',
+    requiresAuth: true,
   },
   {
     icon: <IconHistory size={24} strokeWidth={2} />,
     label: 'Watch History',
     href: '/history',
+    requiresAuth: true,
   },
   {
     icon: <IconFolder size={24} strokeWidth={2} />,
     label: 'Collection',
     href: '/collection',
+    requiresAuth: true,
   },
   {
     icon: <IconUsers size={24} strokeWidth={2} />,
     label: 'Subscriptions',
     href: '/subscriptions',
+    requiresAuth: true,
   },
   {
     icon: <IconGauge size={24} strokeWidth={2} />,
     label: 'Dashboard',
     href: '/dashboard',
+    requiresAuth: true,
   },
 ];
 
@@ -94,13 +102,27 @@ const NavItem = ({
   icon,
   label,
   href,
+  requiresAuth = false,
 }: {
   icon: React.ReactNode;
   label: string;
   href: string;
+  requiresAuth?: boolean;
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const { requireAuth, isAuthenticated } = useRequireAuth();
   const isActive = pathname === href;
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (requiresAuth && !isAuthenticated) {
+      e.preventDefault();
+      requireAuth(() => {
+        router.push(href);
+      });
+    }
+  };
+
   return (
     <li
       className={cn(
@@ -108,9 +130,12 @@ const NavItem = ({
         isActive && 'bg-neutral-100 text-neutral-900'
       )}
     >
-      <Link href={href} className="flex items-center gap-2 p-2 ">
+      <Link
+        href={href}
+        className="flex items-center gap-2 p-2"
+        onClick={handleClick}
+      >
         {icon}
-
         <span className="text-sm font-medium">{label}</span>
       </Link>
     </li>
