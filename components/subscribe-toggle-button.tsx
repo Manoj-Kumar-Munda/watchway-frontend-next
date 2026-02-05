@@ -57,12 +57,12 @@ const SubscribeToggleButton = ({
       {isSubscribed ? (
         <>
           <IconCheck size={18} />
-          Subscribed
+          <span className="hidden sm:inline">Subscribed</span>
         </>
       ) : (
         <>
           <IconUserPlus size={18} />
-          Subscribe
+          <span className="hidden sm:inline">Subscribe</span>
         </>
       )}
     </Button>

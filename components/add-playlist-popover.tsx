@@ -28,6 +28,7 @@ import { Textarea } from './ui/textarea';
 import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
+import { useAuthGuard } from './providers/auth-guard-provider';
 
 interface PlaylistItemProps {
   _id: string;
@@ -205,13 +206,23 @@ function PlaylistsList() {
 }
 
 export function AddToPlaylistPopover() {
+  const { requireAuth } = useAuthGuard();
   return (
     <Popover>
       <PopoverTrigger
-        render={<Button variant="outline" className="gap-2 rounded-full" />}
+        render={
+          <Button
+            variant="outline"
+            className="gap-2 rounded-full"
+            onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              requireAuth(() => {});
+            }}
+          />
+        }
       >
         <IconPlus size={18} />
-        Save as
+        <span className="hidden sm:inline">Save as</span>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <PlaylistsList />

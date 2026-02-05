@@ -29,13 +29,12 @@ const VideoMeta = ({ videoId }: VideoMetaProps) => {
     <div className="space-y-2 w-full">
       <h1 className="text-xl font-bold">{video?.title}</h1>
 
-      {/* channel and video info bar */}
       <div className="flex items-center justify-between">
         <ChannelMeta channelId={channelId} />
 
         <div className="flex gap-4 items-center">
           <AddToPlaylistPopover />
-          <div className="flex items-center gap-1">
+          <div className="hidden sm:flex items-center gap-1">
             <IconEye size={16} className="text-neutral-600" />
             <span className="text-sm text-neutral-600">
               {formatViews(video?.views)}
@@ -46,7 +45,9 @@ const VideoMeta = ({ videoId }: VideoMetaProps) => {
       </div>
 
       <div className="bg-gray-100 p-3 rounded-lg text-neutral-700">
-        <h3 className="font-bold">Description</h3>
+        <p className="font-bold text-primary text-sm sm:hidden mb-2">
+          {formatViews(video?.views)} views
+        </p>
         <p className="text-gray-600 text-sm">{video?.description}</p>
       </div>
     </div>
