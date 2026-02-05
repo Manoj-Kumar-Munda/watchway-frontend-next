@@ -75,7 +75,9 @@ const Thumbnail = ({
   return (
     <div
       className={cn('aspect-video w-full rounded-lg overflow-hidden max-w-sm', {
-        'w-80': orientation === 'horizontal',
+        'w-80': size === 'default',
+        'w-52': size === 'sm',
+        'w-96': size === 'lg',
       })}
     >
       <Image

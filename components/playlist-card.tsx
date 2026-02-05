@@ -15,7 +15,7 @@ interface PlaylistCardProps {
 
 export function PlaylistCard({ playlist }: PlaylistCardProps) {
   return (
-    <Link href={`/playlist/${playlist?._id}`} className="max-w-sm">
+    <Link href={`/collection/${playlist?._id}`} className="max-w-sm">
       <div className="aspect-video relative h-full w-full rounded-md overflow-hidden">
         {playlist?.coverImage ? (
           <Image
