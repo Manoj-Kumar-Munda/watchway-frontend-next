@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Controller, FieldValues, Path, UseFormReturn } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Upload, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -159,6 +159,103 @@ function TextAreaField<T extends FieldValues>({
   );
 }
 
+interface FileFieldProps<T extends FieldValues> {
+  name: Path<T>;
+  label?: string;
+  accept?: string;
+  required?: boolean;
+}
+
+function FileField<T extends FieldValues>({
+  name,
+  label,
+  accept = 'image/*',
+  required = false,
+}: FileFieldProps<T>) {
+  const { form } = useFormContext<T>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = React.useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      form.setValue(name, files as never, { shouldValidate: true });
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result as string);
+      reader.readAsDataURL(files[0]);
+    }
+  };
+
+  const handleClear = () => {
+    form.setValue(name, undefined as never, { shouldValidate: true });
+    setPreview(null);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  return (
+    <Controller
+      name={name}
+      control={form.control}
+      render={({ fieldState }) => (
+        <Field className="gap-1">
+          {label && (
+            <FieldLabel htmlFor={name}>
+              {label}
+              {required && <span className="text-red-500 ml-1">*</span>}
+            </FieldLabel>
+          )}
+          <div className="flex items-center gap-3">
+            {preview ? (
+              <div className="relative">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="w-16 h-16 rounded-full object-cover border"
+                />
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => inputRef.current?.click()}
+                className="w-16 h-16 rounded-full border-2 border-dashed border-muted-foreground/50 flex items-center justify-center cursor-pointer hover:border-primary transition-colors"
+              >
+                <Upload className="w-5 h-5 text-muted-foreground" />
+              </div>
+            )}
+            <input
+              ref={inputRef}
+              id={name}
+              type="file"
+              accept={accept}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            {!preview && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => inputRef.current?.click()}
+              >
+                Choose File
+              </Button>
+            )}
+          </div>
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+}
+
 interface FooterProps {
   children: React.ReactNode;
   className?: string;
@@ -229,4 +326,5 @@ export const Form = {
   SubmitButton,
   FooterLink,
   TextAreaField,
+  FileField,
 };

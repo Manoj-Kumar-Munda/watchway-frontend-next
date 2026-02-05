@@ -39,6 +39,23 @@ export const useCurrentUser = () => {
   });
 };
 
+export const useRegister = () => {
+  return useMutation({
+    mutationFn: (data: FormData) => {
+      return api.post<ApiResponse<IUser>>(endpoints.auth.register.url, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    },
+    onSettled: () => {
+      getQueryClient().invalidateQueries({
+        queryKey: endpoints.users.currentUser.queryKeys,
+      });
+    },
+  });
+};
+
 export const useLogout = () => {
   return useMutation({
     mutationFn: () => {
