@@ -256,6 +256,107 @@ function FileField<T extends FieldValues>({
   );
 }
 
+interface VideoDropzoneProps<T extends FieldValues> {
+  name: Path<T>;
+  label?: string;
+  accept?: string;
+  required?: boolean;
+  placeholder?: string;
+}
+
+function VideoDropzone<T extends FieldValues>({
+  name,
+  label,
+  accept = 'video/*',
+  required = false,
+  placeholder = 'Click to select a video file',
+}: VideoDropzoneProps<T>) {
+  const { form } = useFormContext<T>();
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = React.useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      form.setValue(name, files as never, { shouldValidate: true });
+      setFileName(files[0].name);
+    }
+  };
+
+  const handleClear = () => {
+    form.setValue(name, undefined as never, { shouldValidate: true });
+    setFileName(null);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  return (
+    <Controller
+      name={name}
+      control={form.control}
+      render={({ fieldState }) => (
+        <Field className="gap-1">
+          {label && (
+            <FieldLabel htmlFor={name}>
+              {label}
+              {required && <span className="text-red-500 ml-1">*</span>}
+            </FieldLabel>
+          )}
+          <div
+            onClick={() => !fileName && inputRef.current?.click()}
+            className={`
+              relative flex flex-col items-center justify-center 
+              w-full h-32 border-2 border-dashed rounded-lg
+              transition-colors cursor-pointer
+              ${
+                fileName
+                  ? 'border-primary/50 bg-primary/5'
+                  : 'border-muted-foreground/30 hover:border-primary/50 hover:bg-muted/50'
+              }
+            `}
+          >
+            {fileName ? (
+              <div className="flex flex-col items-center gap-2 px-4">
+                <div className="flex items-center gap-2 text-primary">
+                  <Upload className="w-5 h-5" />
+                  <span className="text-sm font-medium truncate max-w-[200px]">
+                    {fileName}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClear();
+                  }}
+                  className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  Remove file
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                <Upload className="w-8 h-8" />
+                <span className="text-sm">{placeholder}</span>
+              </div>
+            )}
+          </div>
+          <input
+            ref={inputRef}
+            id={name}
+            type="file"
+            accept={accept}
+            onChange={handleFileChange}
+            className="hidden"
+          />
+          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+}
+
 interface FooterProps {
   children: React.ReactNode;
   className?: string;
@@ -327,4 +428,5 @@ export const Form = {
   FooterLink,
   TextAreaField,
   FileField,
+  VideoDropzone,
 };
