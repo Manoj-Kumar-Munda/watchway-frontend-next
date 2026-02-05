@@ -1,5 +1,5 @@
 const SubscribersLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div className="mx-auto">{children}</div>;
+  return <div className="p-4 xl:p-8">{children}</div>;
 };
 
 export default SubscribersLayout;
