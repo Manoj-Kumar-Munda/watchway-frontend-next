@@ -27,7 +27,7 @@ const CommentLikeButton = ({ post }: { post: IComment }) => {
     <ToggleLikeButton
       isLiked={!!data?.data?.data?.isLiked}
       likeCount={data?.data?.data?.likeCount ?? 0}
-      onToggle={handleToggleLike}
+      onClick={handleToggleLike}
     />
   );
 };
