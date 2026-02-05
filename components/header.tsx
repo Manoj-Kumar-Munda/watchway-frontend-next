@@ -22,6 +22,7 @@ import { ROUTES } from '@/config/routes';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { useLogout } from '@/services/auth/auth.service';
 import { toast } from 'sonner';
+import UploadButton from './upload-button';
 
 const Header = () => {
   const { toggleSidebar } = appStore();
@@ -56,10 +57,7 @@ const Header = () => {
         <SearchBar />
         {/* Navigation Items */}
         <nav className="flex items-center gap-4">
-          <Button className={'rounded-full px-4 text-sm'}>
-            <IconVideoPlus size={24} strokeWidth={3} />
-            Upload
-          </Button>
+          <UploadButton />
           <Button variant={'ghost'} size={'icon-lg'} className={'rounded-full'}>
             <IconBell size={24} strokeWidth={2} />
           </Button>

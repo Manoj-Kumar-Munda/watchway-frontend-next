@@ -190,6 +190,54 @@ const useUpdateWatchHistory = (videoId: string, enabled: boolean) => {
   });
 };
 
+interface IUploadVideoResponse {
+  title: string;
+  _id: string;
+  uploadStatus: 'uploading' | 'published' | 'failed';
+}
+
+const useUploadVideo = () => {
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      api.post<ApiResponse<IUploadVideoResponse>>(
+        endpoints.videos.upload.url,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      ),
+  });
+};
+
+export interface IUploadStatusResponse {
+  data: {
+    _id: string;
+    title: string;
+    uploadStatus: IUploadVideoResponse['uploadStatus'];
+    uploadError: string;
+    thumbnail: string;
+    videoFile: string;
+  };
+}
+
+const useUploadStatus = (videoId: string | null) => {
+  return useQuery<ApiResponse<IUploadStatusResponse>>({
+    queryKey: ['upload-status', videoId],
+    queryFn: () =>
+      api.get(endpoints.videos.uploadStatus.url.replace('{videoId}', videoId!)),
+    enabled: !!videoId,
+    refetchInterval: (query) => {
+      const status = query?.state?.data?.data?.data?.uploadStatus;
+      if (status === 'published' || status === 'failed') {
+        return false;
+      }
+      return 3000;
+    },
+  });
+};
+
 export {
   useVideoList,
   useGetVideo,
@@ -199,4 +247,6 @@ export {
   useGetLikedVideos,
   useGetHistory,
   useUpdateWatchHistory,
+  useUploadVideo,
+  useUploadStatus,
 };
