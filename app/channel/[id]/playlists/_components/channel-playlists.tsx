@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useGetPlaylistsByChannelId } from '@/services/playlist/playlist.service';
 import { ChannelAboutSkeleton } from '@/app/channel/_components';
 import { useUserStore } from '@/store';
+import { PlaylistCard } from '@/components/playlist-card';
 
 const ChannelPlaylists = () => {
   const { id } = useParams();
@@ -40,10 +41,10 @@ const ChannelPlaylists = () => {
   }
 
   return (
-    <div>
-      {/* {data?.data?.data?.map((playlist: any) => (
-        <div key={playlist._id}>{playlist.name}</div>
-      ))} */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {data?.data?.data?.map((playlist) => (
+        <PlaylistCard key={playlist._id} playlist={playlist} />
+      ))}
     </div>
   );
 };
