@@ -69,7 +69,7 @@ const UpdateCoverImageModal = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button size="icon-sm" variant="ghost" className="rounded-full">
+          <Button size="icon-sm" className="rounded-full cursor-pointer">
             <IconPencil size={16} />
           </Button>
         }
