@@ -54,7 +54,11 @@ const ChannelVideos = () => {
       style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
     >
       {videos.map((video) => (
-        <VideoCardRoot.Card key={video._id} orientation="vertical">
+        <VideoCardRoot.Card
+          key={video._id}
+          orientation="vertical"
+          videoId={video._id}
+        >
           <VideoCardRoot.Thumbnail src={video.thumbnail} />
           <div className="flex flex-col gap-1 p-2">
             <VideoCardRoot.VideoTitle title={video.title} />

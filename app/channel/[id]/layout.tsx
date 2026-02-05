@@ -43,9 +43,11 @@ const ChannelPageLayout = async ({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ChannelPageContent />
-      <ChannelTabs channelId={id} />
-      <div className="py-4">{children}</div>
+      <div className="p-4 xl:p-6">
+        <ChannelPageContent />
+        <ChannelTabs channelId={id} />
+        <div className="py-4">{children}</div>
+      </div>
     </HydrationBoundary>
   );
 };

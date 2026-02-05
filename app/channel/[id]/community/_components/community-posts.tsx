@@ -11,6 +11,7 @@ import {
 } from '@/services/likes/likes.service';
 import { useToggleLikeCommunityPost } from '@/services/likes/likes.service';
 import { useUserStore } from '@/store';
+import { useAuthGuard } from '@/components/providers/auth-guard-provider';
 
 const ChannelCommunityPostsList = () => {
   const { id } = useParams();
@@ -54,11 +55,12 @@ const CommunityPostItem = ({ post }: CommunityPostItemProps) => {
     post._id
   );
   const { user } = useUserStore();
+  const { requireAuth } = useAuthGuard();
 
   const { data: likeStatus } = useLikeStatus('tweet', post._id, !user);
 
   const handleLikeClick = () => {
-    toggleLike();
+    requireAuth(() => toggleLike());
   };
 
   const handleCommentClick = () => {
