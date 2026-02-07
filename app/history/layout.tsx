@@ -1,5 +1,7 @@
+import Container from '@/components/container';
+
 const HistoryLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div className="p-4 xl:p-8">{children}</div>;
+  return <Container>{children}</Container>;
 };
 
 export default HistoryLayout;

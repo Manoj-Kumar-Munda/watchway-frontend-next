@@ -1,6 +1,7 @@
 import { getQueryClient } from '@/lib/query-client';
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
+import Container from '@/components/container';
 
 const getPost = async (postId: string) => {
   const queryClient = getQueryClient();
@@ -29,7 +30,7 @@ const PostLayout = async ({
 }) => {
   const postId = (await params).id;
   await Promise.all([getPost(postId), getComments(postId)]);
-  return <div className="max-w-3xl mx-auto p-4 w-full">{children}</div>;
+  return <Container className="max-w-3xl mx-auto">{children}</Container>;
 };
 
 export default PostLayout;
