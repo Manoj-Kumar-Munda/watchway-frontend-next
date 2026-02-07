@@ -14,9 +14,11 @@ import { useRequireAuth } from '@/lib/use-require-auth';
 const SubscribeToggleButton = ({
   channelId,
   isSubscribedDefault,
+  isHideText = true,
 }: {
   channelId: string;
   isSubscribedDefault?: boolean;
+  isHideText?: boolean;
 }) => {
   const user = useUserStore((state) => state.user);
   const { requireAuth } = useRequireAuth();
@@ -57,12 +59,16 @@ const SubscribeToggleButton = ({
       {isSubscribed ? (
         <>
           <IconCheck size={18} />
-          <span className="hidden sm:inline">Subscribed</span>
+          <span className={cn('hidden sm:inline', !isHideText && 'inline')}>
+            Subscribed
+          </span>
         </>
       ) : (
         <>
           <IconUserPlus size={18} />
-          <span className="hidden sm:inline">Subscribe</span>
+          <span className={cn('hidden sm:inline', !isHideText && 'inline')}>
+            Subscribe
+          </span>
         </>
       )}
     </Button>
