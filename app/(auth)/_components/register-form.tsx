@@ -34,9 +34,15 @@ const registerSchema = z.object({
     .min(1, 'Password is required')
     .min(6, 'Password must be at least 6 characters long'),
   avatar: z
-    .instanceof(FileList)
+    .custom<FileList>(
+      (val) => typeof FileList !== 'undefined' && val instanceof FileList
+    )
     .refine((files) => files && files.length > 0, 'Please upload a photo'),
-  coverImage: z.instanceof(FileList).optional(),
+  coverImage: z
+    .custom<FileList>(
+      (val) => typeof FileList !== 'undefined' && val instanceof FileList
+    )
+    .optional(),
 });
 
 export type RegisterFormSchema = z.infer<typeof registerSchema>;

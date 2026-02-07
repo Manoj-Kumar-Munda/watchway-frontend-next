@@ -20,14 +20,18 @@ import { useUploadStore } from '@/store';
 
 const uploadVideoSchema = z.object({
   video: z
-    .instanceof(FileList)
+    .custom<FileList>(
+      (val) => typeof FileList !== 'undefined' && val instanceof FileList
+    )
     .refine((files) => files.length > 0, 'Video is required')
     .refine(
       (files) => files[0]?.type.startsWith('video/'),
       'File must be a video'
     ),
   coverImage: z
-    .instanceof(FileList)
+    .custom<FileList>(
+      (val) => typeof FileList !== 'undefined' && val instanceof FileList
+    )
     .refine((files) => files.length > 0, 'Cover image is required')
     .refine(
       (files) => files[0]?.type.startsWith('image/'),
