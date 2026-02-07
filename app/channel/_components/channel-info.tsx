@@ -36,7 +36,7 @@ const ChannelInfo = ({ channel, isPending }: ChannelInfoProps) => {
         </div>
 
         <div className="flex items-center gap-3 mt-4">
-          <SubscribeToggleButton channelId={channel._id} />
+          <SubscribeToggleButton channelId={channel._id} isHideText={false} />
         </div>
       </div>
     </div>
