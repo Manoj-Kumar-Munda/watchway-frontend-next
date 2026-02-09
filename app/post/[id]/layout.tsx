@@ -1,7 +1,13 @@
+import type { Metadata } from 'next';
 import { getQueryClient } from '@/lib/query-client';
 import { endpoints } from '@/config/endpoints';
 import api from '@/lib/api';
 import Container from '@/components/container';
+
+export const metadata: Metadata = {
+  title: 'Post',
+  description: 'View community post and comments on Watchway.',
+};
 
 const getPost = async (postId: string) => {
   const queryClient = getQueryClient();
