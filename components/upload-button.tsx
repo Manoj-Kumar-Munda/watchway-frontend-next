@@ -17,6 +17,7 @@ import { Form } from '@/components/form';
 import { useUploadVideo } from '@/services/video/video.service';
 import { toast } from 'sonner';
 import { useUploadStore } from '@/store';
+import { useRequireAuth } from '@/lib/use-require-auth';
 
 const uploadVideoSchema = z.object({
   video: z
@@ -46,6 +47,7 @@ export type UploadVideoFormSchema = z.infer<typeof uploadVideoSchema>;
 const UploadButton = () => {
   const [open, setOpen] = useState(false);
   const { mutateAsync: uploadVideo } = useUploadVideo();
+  const { requireAuth } = useRequireAuth();
 
   const form = useForm<UploadVideoFormSchema>({
     resolver: zodResolver(uploadVideoSchema),
@@ -90,7 +92,7 @@ const UploadButton = () => {
   return (
     <>
       <Button
-        onClick={() => setOpen(true)}
+        onClick={() => requireAuth(() => setOpen(true))}
         className={'rounded-full sm:px-4 text-sm'}
       >
         <IconVideoPlus strokeWidth={3} className="sm:mr-2" />
